@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pocony: Your Pocket Balcony</title>
+    <link rel="icon" href="./logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfbf7;
+        }
+        .font-quicksand {
+            font-family: 'Quicksand', sans-serif;
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+        /* Mobile Frame Styling */
+        .phone-frame {
+            position: relative;
+            width: 280px;
+            height: 580px;
+            background: #111;
+            border-radius: 40px;
+            border: 12px solid #222;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+        .phone-frame video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <!-- Header -->
+    <header class="backdrop-blur-xl bg-white/30 sticky top-0 z-40 px-5 xl:px-0 py-4">
+        <div class="max-w-screen-xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="./logo.png" alt="Pocony Logo" class="w-10 h-10 rounded-xl shadow-sm">
+                <span class="font-quicksand font-bold text-xl tracking-tight">Pocony</span>
+            </div>
+            <nav class="hidden md:flex gap-6 items-center">
+                <a href="#features" class="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">Features</a>
+                <a href="#how-it-works" class="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">How it Works</a>
+                <!-- <a href="#download" class="bg-green-600 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-green-700 transition-all shadow-md">Download</a> -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="min-h-[90vh] flex items-center justify-center px-8 py-20 relative">
+        <div class="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <!-- Left: Text Content -->
+            <div class="order-2 lg:order-1">
+                <div class="inline-block px-4 py-1.5 mb-6 rounded-full bg-green-50 text-green-700 text-sm font-bold animate-fade-in-up" style="animation-delay: 0.1s;">
+                    Your Pocket Balcony
+                </div>
+                <h1 class="font-quicksand text-5xl lg:text-7xl font-bold leading-tight mb-6 animate-fade-in-up text-gray-900" style="animation-delay: 0.2s;">
+                    Pocony
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-600 mb-8 leading-relaxed animate-fade-in-up" style="animation-delay: 0.3s;">
+                    Build a little balcony on your phone. Where plants grow with the real weather outside.
+                </p>
+                
+                <div class="space-y-4 mb-10 animate-fade-in-up" style="animation-delay: 0.4s;">
+                    <p class="text-gray-500 leading-relaxed max-w-lg">
+                        When it rains outside, or when the sky clears up, the weather in the game changes too. 
+                        Watch your unique flowers bloom at their own pace, synced with your real-world environment.
+                    </p>
+                </div>
+
+                <!-- <div id="download" class="flex flex-col sm:flex-row gap-4 animate-fade-in-up" style="animation-delay: 0.5s;">
+                    <a href="#" class="flex items-center justify-center gap-3 px-8 py-4 bg-black text-white rounded-2xl font-bold hover:scale-105 transition-transform shadow-xl">
+                        <svg class="w-6 h-6" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
+                        App Store
+                    </a>
+                    <a href="#" class="flex items-center justify-center gap-3 px-8 py-4 bg-white border-2 border-gray-200 text-black rounded-2xl font-bold hover:bg-gray-50 transition-colors">
+                        <svg class="w-6 h-6" viewBox="0 0 512 512" fill="currentColor"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"></path></svg>
+                        Google Play
+                    </a>
+                </div> -->
+            </div>
+
+            <!-- Right: App Visual (Video) -->
+            <div class="order-1 lg:order-2 flex justify-center relative">
+                <div class="absolute w-[400px] h-[400px] bg-green-200/30 rounded-full blur-3xl -z-10 animate-pulse"></div>
+                <div class="phone-frame animate-float">
+                    <video autoplay muted loop playsinline>
+                        <source src="./screenVideo.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 bg-white">
+        <div class="max-w-6xl mx-auto px-8">
+            <h2 class="font-quicksand text-4xl font-bold text-center mb-16 text-gray-900">Magical Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="p-8 bg-stone-100 rounded-2xl card-hover border border-gray-200">
+                    <h3 class="text-xl font-bold mb-4 text-gray-900">Real time Weather</h3>
+                    <p class="text-gray-600 leading-relaxed">The sky in your pocket balcony reflects your real sky. Rain, sun, or clouds your plants feel it all.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="p-8 bg-stone-100 rounded-2xl card-hover border border-gray-200">
+                    <h3 class="text-xl font-bold mb-4 text-gray-900">Daily Seeds</h3>
+                    <p class="text-gray-600 leading-relaxed">Check your mail every day! You get one chance daily to receive unique seeds to grow your collection.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="p-8 bg-stone-100 rounded-2xl card-hover border border-gray-200">
+                    <h3 class="text-xl font-bold mb-4 text-gray-900">Unique Growth</h3>
+                    <p class="text-gray-600 leading-relaxed">Each flower has its own function and grows at a different pace. Patience is the key to a beautiful balcony.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how-it-works" class="py-24 bg-stone-50">
+        <div class="max-w-4xl mx-auto px-8">
+            <h2 class="font-quicksand text-4xl font-bold text-center mb-16 text-gray-900">How to Start</h2>
+            <div class="space-y-12">
+                <div class="flex gap-6 items-start">
+                    <div class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center font-bold text-green-600 shrink-0">1</div>
+                    <div>
+                        <h4 class="text-xl font-bold mb-2">Login with Email</h4>
+                        <p class="text-gray-600">Securely sign in with your email. We'll save your balcony state so you never lose your plants.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 items-start">
+                    <div class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center font-bold text-green-600 shrink-0">2</div>
+                    <div>
+                        <h4 class="text-xl font-bold mb-2">Sync with Nature</h4>
+                        <p class="text-gray-600">Pocony uses your phone's weather API and time to calculate growth days and environment conditions.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 items-start">
+                    <div class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center font-bold text-green-600 shrink-0">3</div>
+                    <div>
+                        <h4 class="text-xl font-bold mb-2">Collect & Grow</h4>
+                        <p class="text-gray-600">Plant your 3 starter flowers and expand your balcony as you receive new seeds in the mail.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 py-16">
+        <div class="max-w-6xl mx-auto px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="./logo.png" alt="Pocony Logo" class="w-8 h-8 rounded-lg">
+                        <span class="font-quicksand font-bold text-lg">Pocony</span>
+                    </div>
+                    <p class="text-gray-500 text-sm">Your pocket balcony companion.</p>
+                </div>
+                <div>
+                    <h5 class="font-bold mb-4">Legal</h5>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="privacy-policy.html" class="hover:text-green-600 transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms-of-service.html" class="hover:text-green-600 transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold mb-4">Contact</h5>
+                    <p class="text-sm text-gray-600">hello@pocony.app</p>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-gray-50 text-center text-sm text-gray-400">
+                &copy; 2026 Pocony App. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
