@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account - Pocony</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfbf7;
+            color: #374151;
+        }
+        .font-quicksand {
+            font-family: 'Quicksand', sans-serif;
+        }
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background-color: #f0fdf4;
+            color: #16a34a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="backdrop-blur-xl bg-white/30 sticky top-0 z-40 px-5 xl:px-0 py-4 border-b border-gray-100">
+        <div class="max-w-screen-xl mx-auto flex justify-between items-center">
+            <a href="/" class="flex items-center gap-2">
+                <img src="../logo.png" alt="Pocony Logo" class="w-8 h-8 rounded-lg object-contain">
+                <span class="font-quicksand font-bold text-lg tracking-tight">Pocony</span>
+            </a>
+            <a href="/" class="text-sm font-medium text-gray-600 hover:text-green-600 transition-colors">Back to Home</a>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-grow py-16 px-8">
+        <div class="max-w-3xl mx-auto bg-white p-8 md:p-12 rounded-[2.5rem] shadow-sm border border-gray-100">
+            <h1 class="font-quicksand text-4xl font-bold mb-4 text-gray-900">Delete Account</h1>
+            <p class="text-gray-600 mb-8">We're sorry to see you go. If you choose to delete your Pocony account, all your data including your email and plant growth progress will be permanently removed from our servers.</p>
+
+            <div class="space-y-8">
+                <h2 class="font-quicksand text-2xl font-bold text-gray-800">How to delete your account</h2>
+                
+                <div class="flex gap-4 items-start">
+                    <div class="step-number">1</div>
+                    <div>
+                        <p class="font-bold text-gray-900 mb-1">Open the Menu</p>
+                        <p class="text-gray-600 text-sm">Tap the button in the bottom right corner of the screen.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 items-start">
+                    <div class="step-number">2</div>
+                    <div>
+                        <p class="font-bold text-gray-900 mb-1">Go to Settings</p>
+                        <p class="text-gray-600 text-sm">Select the <strong>Setting</strong> button (the leftmost icon in the menu).</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 items-start">
+                    <div class="step-number">3</div>
+                    <div>
+                        <p class="font-bold text-gray-900 mb-1">Select Delete Account</p>
+                        <p class="text-gray-600 text-sm">Find and tap the <strong>Delete account</strong> option.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 items-start">
+                    <div class="step-number">4</div>
+                    <div>
+                        <p class="font-bold text-gray-900 mb-1">Confirm Deletion</p>
+                        <p class="text-gray-600 text-sm">Type the word <span class="bg-red-50 text-red-600 px-2 py-0.5 rounded font-mono font-bold">DELETE</span> to confirm. Your account and all associated data will be instantly erased.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 p-6 bg-orange-50 rounded-2xl border border-orange-100">
+                <p class="text-sm text-orange-800 font-medium">
+                    <strong>Note:</strong> This action is irreversible. Once deleted, your balcony cannot be recovered.
+                </p>
+            </div>
+
+            <div class="mt-12 pt-8 border-t border-gray-100">
+                <p class="text-gray-500 text-sm text-center">Need help? Contact us at <a href="mailto:404chenhavefun@gmail.com" class="text-green-600 font-medium">404chenhavefun@gmail.com</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-gray-100 text-center">
+        <p class="text-sm text-gray-400">&copy; 2026 Pocony App. All rights reserved.</p>
+    </footer>
+</body>
+</html>
