@@ -1,9 +1,52 @@
 {
   "items": [
-    { "type": "Plants",  "image": "./wiki/lavender.png", "title": "Lavender", "text": "A calm purple flower. Grows slowly but gives double crops when harvested fully mature." },
-    { "type": "Plants",  "image": "./wiki/mint.png",     "title": "Mint",     "text": "Fast growing herb. Likes moist soil and spreads quickly, so remember to water it." },
-    { "type": "Weather", "image": "./wiki/sunny.png",    "title": "Sunny",    "text": "Clear sky. Soil dries faster, so plants need more watering." },
-    { "type": "Weather", "image": "./wiki/rain.png",     "title": "Rain",     "text": "Real rain outside means rain on your balcony. Moisture goes up on its own." },
-    { "type": "Soil",    "image": "./wiki/loam.png",     "title": "Loam",     "text": "Balanced soil with good water retention. A safe choice for any starter pot." }
+    { 
+      "type": "Tools",  
+      "image": "./wiki/tools/UI_weed.png", 
+      "title": "Garden Shears", 
+      "text": "Use the garden shears to remove weeds. Weeds slow down flower growth." 
+    },
+    { 
+      "type": "Tools",  
+      "image": "./wiki/tools/UI_harvest.png",     
+      "title": "Harvest",     
+      "text": "Harvesting when a plant is fully mature gives double the yield." 
+    },
+    { 
+      "type": "Tools", 
+      "image": "./wiki/tools/UI_water.png",    
+      "title": "Watering",    
+      "text": "Each watering raises moisture by 10. Moisture retention depends on the soil type and resets daily." 
+    },
+    { 
+      "type": "Tools", 
+      "image": "./wiki/tools/UI_spade.png",    
+      "title": "Trowel",    
+      "text": "Use the spade to scoop soil out of pots. Swapping soil to match your plants helps them thrive." 
+    },
+    { 
+      "type": "Tools", 
+      "image": "./wiki/tools/UI_skillTree.png",     
+      "title": "Level Up",     
+      "text": "Once you have enough plants, it's time to level up! Tip: Growing a variety of plants makes leveling up easier." 
+    },
+    { 
+      "type": "Tools",    
+      "image": "./wiki/tools/ui_all_reputation.png",     
+      "title": "Reputation",     
+      "text": "This is reputation. You can earn it by trading items via mail." 
+    },
+    { 
+      "type": "Tools",    
+      "image": "./wiki/tools/ui_all_point.png",     
+      "title": "Points",     
+      "text": "Points can only be acquired through purchase." 
+    },
+    { 
+      "type": "Tools",    
+      "image": "./wiki/tools/ui_all_letter.png",     
+      "title": "Mailbox",     
+      "text": "A random plant is delivered to your mailbox every day. Remember to check it!" 
+    }
   ]
 }

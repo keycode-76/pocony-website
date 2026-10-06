@@ -93,7 +93,7 @@ footer a{color:var(--ter);margin:0 8px}
 </style>
 </head>
 <body>
-<header><div><a class="brand" href="#home"><img src="./logo.png" alt="" onerror="this.style.display='none'"><img class="ttl" src="./title.png" alt="Pocony"></a>
+<header><div><a class="brand" href="#home"><img src="./logo.png" alt="" onerror="this.style.display='none'"></a>
 <nav class="nav"><a class="btn" id="b-wiki" href="#wiki">Wiki</a><a class="btn" id="b-lang" href="#language">Language</a></nav></div></header>
 
 <section class="hero" id="home">
@@ -189,7 +189,7 @@ function render(){
   $('fill').style.width=((cur+1)/P.length*100)+'%';
   
   $('page').className='page'+(dir<0?' back':'');
-  $('page').innerHTML=`<h2></h2><p></p><div class="shot" style="background-image:url(./tutorial/tutorial_${n}.png)">${cur+1}</div>`;
+  $('page').innerHTML=`<h2></h2><p></p><div class="shot" style="background-image:url(./wiki/tutorial_${n}.png)">${cur+1}</div>`;
   $('page').querySelector('h2').textContent=t;
   $('page').querySelector('p').textContent=d;
   $('page').style.display='none';$('page').offsetHeight;$('page').style.display='';
