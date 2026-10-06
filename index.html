@@ -1,275 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pocony: Your Pocket Balcony</title>
-    <link rel="icon" href="./logo.png" type="image/png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #fdfbf7;
-        }
-        .font-quicksand {
-            font-family: 'Quicksand', sans-serif;
-        }
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-            opacity: 0;
-        }
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            transition: all 0.3s ease;
-        }
-        /* Mobile Frame Styling */
-        .phone-frame {
-            position: relative;
-            width: 280px;
-            height: 580px;
-            background: #111;
-            border-radius: 40px;
-            border: 12px solid #222;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .phone-frame video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pocony: Your Pocket Balcony</title>
+<link rel="icon" href="./logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#ecdcc5;--white:#FDF5E6;--ink:#000;--sub:#d8861e;--ter:#c96400;--gray:#d5cbb3;
+--mono:Consolas,"Courier New",monospace;--fat:"VT323",Consolas,monospace}
+@media(prefers-color-scheme:dark){:root{--bg:#2b2318}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background-color:#c0bdaa;background-image:linear-gradient(rgba(0,0,0,.08) 2px,transparent 2px),linear-gradient(90deg,rgba(0,0,0,.08) 2px,transparent 2px);background-size:24px 24px;min-height:100vh;color:var(--ink);font:18px/1.5 var(--mono);letter-spacing:.1px;overflow-x:hidden}
+img{max-width:100%}
+.fat{font-family:var(--fat);font-weight:bold;color:var(--white);-webkit-text-stroke:0;
+text-shadow:-2px 0 var(--sub),2px 0 var(--sub),0 -2px var(--sub),0 2px var(--sub),-1px -1px var(--sub),1px 1px var(--sub),-1px 1px var(--sub),1px -1px var(--sub);margin:0}
+header{position:sticky;top:0;z-index:5;background:var(--paper);padding:10px 16px}
+header div{max-width:1100px;margin:auto;display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none}
+.nav{margin-left:auto;display:flex;gap:8px}
+header .btn{min-height:40px;padding:4px 14px}
+.btn.on{background:var(--ink);color:#fff}
+header .brand img{width:36px;height:36px;image-rendering:pixelated}
+header .fat{font-size:30px}
+/* square outline buttons (BottomBtn) */
+.btn{font:inherit;font-size:16px;color:var(--ink);background:transparent;border:1.5px solid var(--ink);padding:10px 18px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px}
+.btn:active{transform:translateY(2px)}
+.btn.solid{background:var(--ink);color:#fff;font-weight:bold}
+.btn[disabled]{border:1px dashed rgba(0,0,0,.4);color:rgba(0,0,0,.4);cursor:not-allowed;transform:none}
+.btn:focus-visible,.tab:focus-visible,.card:focus-visible{outline:3px solid var(--sub);outline-offset:2px}
+/* hero */
+.hero{max-width:1100px;margin:auto;padding:36px 20px;display:grid;gap:28px;align-items:center;grid-template-columns:1fr 280px}
+.hero h1{margin:6px 0 14px;line-height:0}
+.ttl{width:auto;image-rendering:pixelated;display:block}
+header .brand img.ttl{height:30px;width:auto}
+.hero h1 .ttl{height:140px;max-width:100%;object-fit:contain}
+.hero p{margin:0 0 20px;color:var(--ink);max-width:30ch}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.phone{width:240px;height:490px;border:12px solid #222;border-radius:40px;background:#111;box-shadow:0 25px 50px -12px rgba(0,0,0,.5);justify-self:center;overflow:hidden}
+.phone video{width:100%;height:100%;object-fit:cover}
+/* tabs */
+.tabs{max-width:560px;margin:0 auto;padding:0 15px;display:flex;gap:2px}
+.tab{flex:1;height:50px;font:inherit;font-size:18px;font-weight:bold;border:1.5px solid var(--ink);border-bottom:0;background:var(--gray);color:rgba(0,0,0,.55);cursor:pointer;transform:translateY(4px);transition:transform .08s}
+.tab[aria-selected=true]{background:var(--paper);color:var(--ink);transform:none;height:54px;align-self:flex-end}
+.panel{max-width:560px;margin:24px auto 48px;padding:0 15px}
+.sheet{background:var(--paper);border:1.5px solid var(--ink);padding:20px 22px 20px;min-height:600px;display:flex;flex-direction:column}
+[hidden]{display:none!important}
+a.card{text-decoration:none;color:inherit}
+.entry{display:flex;gap:12px;margin-top:12px;background:var(--white);border:1px solid var(--ink);padding:10px;min-height:116px}
+.entry .im{width:96px;height:96px;flex:none;border:1px solid var(--ink);background:var(--gray) center/cover no-repeat;image-rendering:pixelated}
+.entry h3{margin:0 0 4px;font-size:20px}.entry p{margin:0;color:var(--ter);font-size:16px;line-height:1.5}
+.sheet.short{min-height:0}
+.toast{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--white);color:var(--ink);padding:14px 22px;box-shadow:0 4px 12px rgba(0,0,0,.25);z-index:20;text-align:center}
+.top{display:flex;align-items:center;gap:12px}
+.sq{width:40px;height:40px;font:bold 22px var(--mono);background:none;border:1.5px solid var(--ink);cursor:pointer}
+.sq:disabled{opacity:.3;cursor:default}
+.step{font-weight:bold;letter-spacing:2px;white-space:nowrap}
+.bar{flex:1;height:5px;background:rgba(0,0,0,.2)}
+.bar i{display:block;height:100%;width:0;background:#000;transition:width .2s}
+.page{flex:1;padding:18px 0 14px;animation:turn .22s ease-out;touch-action:pan-y}
+@keyframes turn{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+.page.back{animation-name:turnb}
+@keyframes turnb{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+.page h2{font-size:26px;line-height:1.2;margin:0 0 10px}
+.page p{margin:0 0 16px;color:var(--ter);line-height:1.6}
+.shot{aspect-ratio:1;border:1px solid var(--ink);background:var(--gray) center/cover no-repeat;display:grid;place-items:center;font-family:var(--fat);font-size:28px;color:var(--sub)}
+.dots{display:flex;gap:6px;justify-content:center;margin:0 0 12px}
+.dots b{width:6px;height:6px;background:var(--sub);opacity:.35}
+.dots b.on{opacity:1;background:var(--ink)}
+.full{width:100%;height:48px}
+/* board tab */
+.sheet h2.fat{font-size:40px}
+.lead{color:var(--ter);margin:4px 0 16px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
+.card{font:inherit;text-align:left;background:var(--white);border:1px solid var(--ink);padding:12px;cursor:pointer;display:flex;gap:10px;align-items:center;min-height:64px}
+.card .fl{font-size:28px}
+.card small{display:block;color:var(--sub)}
+.card[aria-pressed=true]{border:2px solid var(--sub);background:var(--sub);color:var(--ink)}
+.card[aria-pressed=true] small{color:var(--ink)}
+.card:active{transform:translateY(2px)}
+.load{width:100%;height:22px;border:1px solid var(--sub);border-radius:3px;padding:3px;margin:14px 0 6px}
+.load i{display:block;height:100%;width:0;background:var(--ter);border-radius:2px}
+.done{background:var(--white);border:1px solid var(--ink);padding:14px;margin-top:12px}
+.done p{margin:0 0 10px}
+.sail{animation:sway 1.2s ease-in-out infinite;display:inline-block}
+@keyframes sway{50%{transform:translateY(-4px) rotate(-4deg)}}
+footer{background:var(--paper);padding:22px 16px;text-align:center;font-size:15px}
+footer a{color:var(--ter);margin:0 8px}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.phone{order:-1;height:380px;width:190px}.hero p{max-width:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
 </head>
-<body class="overflow-x-hidden">
-    <!-- Header -->
-    <header class="backdrop-blur-xl bg-white/30 sticky top-0 z-40 px-5 xl:px-0 py-4">
-        <div class="max-w-screen-xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <img src="./logo.png" alt="Pocony Logo" class="w-10 h-10 rounded-xl shadow-sm">
-                <span class="font-quicksand font-bold text-xl tracking-tight">Pocony</span>
-            </div>
-            <nav class="hidden md:flex gap-6 items-center">
-                <a href="#features" class="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">Features</a>
-                <a href="#how-it-works" class="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">How it Works</a>
-                <!-- <a href="#download" class="bg-green-600 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-green-700 transition-all shadow-md">Download</a> -->
-            </nav>
-        </div>
-    </header>
+<body>
+<header><div><a class="brand" href="#home"><img src="./logo.png" alt="" onerror="this.style.display='none'"><img class="ttl" src="./title.png" alt="Pocony"></a>
+<nav class="nav"><a class="btn" id="b-wiki" href="#wiki">Wiki</a><a class="btn" id="b-lang" href="#language">Language</a></nav></div></header>
 
-    <!-- Hero Section -->
-    <main class="min-h-[90vh] flex items-center justify-center px-8 py-20 relative">
-        <div class="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <!-- Left: Text Content -->
-            <div class="order-2 lg:order-1">
-                <div class="inline-block px-4 py-1.5 mb-6 rounded-full bg-green-50 text-green-700 text-sm font-bold animate-fade-in-up" style="animation-delay: 0.1s;">
-                    Your Pocket Balcony
-                </div>
-                <h1 class="font-quicksand text-5xl lg:text-7xl font-bold leading-tight mb-6 animate-fade-in-up text-gray-900" style="animation-delay: 0.2s;">
-                    Pocony
-                </h1>
-                <p class="text-xl lg:text-2xl text-gray-600 mb-8 leading-relaxed animate-fade-in-up" style="animation-delay: 0.3s;">
-                    Build a little balcony on your phone. Where plants grow with the real weather outside.
-                </p>
-                
-                <div class="space-y-4 mb-10 animate-fade-in-up" style="animation-delay: 0.4s;">
-                    <p class="text-gray-500 leading-relaxed max-w-lg">
-                        When it rains outside, or when the sky clears up, the weather in the game changes too. 
-                        Watch your unique flowers bloom at their own pace, synced with your real-world environment.
-                    </p>
-                </div>
-
-                <div id="download" class="flex flex-col sm:flex-row gap-4 animate-fade-in-up" style="animation-delay: 0.5s;">
-                    <button type="button" data-store-button data-store-name="App Store" class="flex items-center justify-center gap-3 px-8 py-4 bg-black text-white rounded-2xl font-bold hover:scale-105 transition-transform shadow-xl">
-                        <svg class="w-6 h-6" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
-                        App Store
-                    </button>
-                    <button 
-                        type="button" 
-                        data-store-button data-store-name="Google Play" 
-                        class="flex items-center justify-center gap-3 px-8 py-4 bg-white border-2 border-gray-200 text-black rounded-2xl font-bold hover:bg-gray-50 transition-colors"
-                        onclick="window.open('https://play.google.com/store/apps/details?id=com.pocony.app', '_blank')"
-                        >
-                        <svg class="w-6 h-6" viewBox="0 0 512 512" fill="currentColor"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"></path></svg>
-                        Google Play
-                    </button>
-                    <a
-                        href="https://discord.gg/fK7VvhY2Mc"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="flex items-center justify-center gap-3 px-8 py-4 bg-[#5865F2] text-white rounded-2xl font-bold hover:bg-[#4752C4] hover:scale-105 transition-all shadow-xl"
-                        >
-                        <svg class="w-6 h-6" viewBox="0 0 127.14 96.36" fill="currentColor"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"></path></svg>
-                        Discord
-                    </a>
-                </div>
-            </div>
-
-            <!-- Right: App Visual (Video) -->
-            <div class="order-1 lg:order-2 flex justify-center relative">
-                <div class="absolute w-[400px] h-[400px] bg-green-200/30 rounded-full blur-3xl -z-10 animate-pulse"></div>
-                <div class="phone-frame animate-float">
-                    <video autoplay muted loop playsinline>
-                        <source src="./screenVideo.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Features Section -->
-    <section id="features" class="py-24 bg-white">
-        <div class="max-w-6xl mx-auto px-8">
-            <h2 class="font-quicksand text-4xl font-bold text-center mb-16 text-gray-900">Magical Features</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div class="p-8 bg-stone-100 rounded-2xl card-hover border border-gray-200">
-                    <h3 class="text-xl font-bold mb-4 text-gray-900">Real time Weather</h3>
-                    <p class="text-gray-600 leading-relaxed">The sky in your pocket balcony reflects your real sky. Rain, sun, or clouds your plants feel it all.</p>
-                </div>
-                <!-- Feature 2 -->
-                <div class="p-8 bg-stone-100 rounded-2xl card-hover border border-gray-200">
-                    <h3 class="text-xl font-bold mb-4 text-gray-900">Daily Seeds</h3>
-                    <p class="text-gray-600 leading-relaxed">Check your mail every day! You get one chance daily to receive unique seeds to grow your collection.</p>
-                </div>
-                <!-- Feature 3 -->
-                <div class="p-8 bg-stone-100 rounded-2xl card-hover border border-gray-200">
-                    <h3 class="text-xl font-bold mb-4 text-gray-900">Unique Growth</h3>
-                    <p class="text-gray-600 leading-relaxed">Each flower has its own function and grows at a different pace. Patience is the key to a beautiful balcony.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How it works -->
-    <section id="how-it-works" class="py-24 bg-stone-50">
-        <div class="max-w-4xl mx-auto px-8">
-            <h2 class="font-quicksand text-4xl font-bold text-center mb-16 text-gray-900">How to Start</h2>
-            <div class="space-y-12">
-                <div class="flex gap-6 items-start">
-                    <div class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center font-bold text-green-600 shrink-0">1</div>
-                    <div>
-                        <h4 class="text-xl font-bold mb-2">Login with Email</h4>
-                        <p class="text-gray-600">Securely sign in with your email. We'll save your balcony state so you never lose your plants.</p>
-                    </div>
-                </div>
-                <div class="flex gap-6 items-start">
-                    <div class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center font-bold text-green-600 shrink-0">2</div>
-                    <div>
-                        <h4 class="text-xl font-bold mb-2">Sync with Nature</h4>
-                        <p class="text-gray-600">Pocony uses your phone's weather API and time to calculate growth days and environment conditions.</p>
-                    </div>
-                </div>
-                <div class="flex gap-6 items-start">
-                    <div class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center font-bold text-green-600 shrink-0">3</div>
-                    <div>
-                        <h4 class="text-xl font-bold mb-2">Collect & Grow</h4>
-                        <p class="text-gray-600">Plant your 3 starter flowers and expand your balcony as you receive new seeds in the mail.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-100 py-16">
-        <div class="max-w-6xl mx-auto px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <img src="./logo.png" alt="Pocony Logo" class="w-8 h-8 rounded-lg">
-                        <span class="font-quicksand font-bold text-lg">Pocony</span>
-                    </div>
-                    <p class="text-gray-500 text-sm">Your pocket balcony companion.</p>
-                </div>
-                <div>
-                    <h5 class="font-bold mb-3">Legal</h5>
-                    <ul class="space-y-1 text-sm text-gray-600">
-                        <li><a href="/privacy-policy/" class="hover:text-green-600 transition-colors">Privacy Policy</a></li>
-                        <li><a href="/terms-of-service/" class="hover:text-green-600 transition-colors">Terms of Service</a></li>
-                        <li><a href="/delete-account/" class="hover:text-green-600 transition-colors">Delete Account</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h5 class="font-bold mb-3">Contact</h5>
-                    <a 
-                        href="https://x.com/404chenhavefun" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        class="text-sm text-green-600 font-medium"
-                        >
-                        @404chen
-                    </a>
-                    <p class="text-sm text-gray-600">Email: 404chenhavefun@gmail.com</p>
-                </div>
-            </div>
-            <div class="pt-8 border-t border-gray-50 text-center text-sm text-gray-400">
-                &copy; 2026 Pocony App. All rights reserved.
-            </div>
-        </div>
-    </footer>
-
-    <div id="comingSoonModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 px-6">
-        <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl border border-gray-100">
-            <p id="comingSoonStore" class="text-sm font-semibold text-green-600 mb-2">Mobile Store</p>
-            <h3 class="font-quicksand text-2xl font-bold text-gray-900 mb-2">Coming soon on mobile</h3>
-            <!-- <p class="text-gray-600 mb-5">We're preparing this download link. Please check back soon.</p> -->
-            <button id="closeComingSoonModal" type="button" class="w-full rounded-xl bg-green-600 text-white font-semibold py-3 hover:bg-green-700 transition-colors">
-                Got it
-            </button>
-        </div>
+<section class="hero" id="home">
+  <div>
+    <h1><img class="ttl" src="./title.png" alt="Pocony"></h1>
+    <div class="row" style="margin-bottom:18px">
+      <button class="btn solid" data-store="App Store">App Store</button>
+      <a class="btn" href="https://play.google.com/store/apps/details?id=com.pocony.app" target="_blank" rel="noopener">Google Play</a>
+      <a class="btn" href="https://discord.gg/fK7VvhY2Mc" target="_blank" rel="noopener">Discord</a>
     </div>
+    <span class="fat" style="font-size:24px;display:block;margin-bottom:6px">Your Pocket Balcony</span>
+    <p>Build a little balcony on your phone. Plants grow with the real weather outside.</p>
+  </div>
+  <div class="phone"><video autoplay muted loop playsinline><source src="./screenVideo.mp4" type="video/mp4"></video></div>
+</section>
 
-    <script>
-        const modal = document.getElementById('comingSoonModal');
-        const storeLabel = document.getElementById('comingSoonStore');
-        const closeModalButton = document.getElementById('closeComingSoonModal');
-        const storeButtons = document.querySelectorAll('[data-store-button]');
 
-        function openComingSoonModal(storeName) {
-            storeLabel.textContent = storeName;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
+<main class="panel" id="views" hidden>
+  <!-- Guide -->
+  <section id="guide" class="sheet" aria-label="Guide">
+    <div class="top">
+      <button class="sq" id="prev" aria-label="Previous page">&lt;</button>
+      <span class="step" id="step"></span>
+      <div class="bar"><i id="fill"></i></div>
+    </div>
+    <div class="page" id="page"></div>
+    <div class="dots" id="dots"></div>
+    <button class="btn solid full" id="next"></button>
+  </section>
 
-        function closeComingSoonModal() {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
+  <!-- Wiki list -->
+  <section id="wiki" class="sheet short" aria-label="Wiki" hidden>
+    <h2 class="fat">Wiki</h2>
+    <p class="lead">Guides and tips for Pocony.</p>
+    <div class="grid" id="wgrid">
+      <a class="card" href="#wiki/update"><span class="fl">📖</span><span>NEW UPDATE<small>Getting started</small></span></a>
+      <button class="card" id="addwiki"><span class="fl">＋</span><span>Add a page<small>Text &amp; images</small></span></button>
+    </div>
+  </section>
 
-        storeButtons.forEach((button) => {
-            button.addEventListener('click', () => {
-                openComingSoonModal(button.dataset.storeName || 'Mobile Store');
-            });
-        });
+  <!-- Wiki entries -->
+  <section id="wlist" class="sheet short" aria-label="Wiki list" hidden>
+    <div class="top"><button class="sq" id="wback" aria-label="Back">&lt;</button><h2 class="fat" id="wtitle" style="margin:0"></h2></div>
+    <div id="wrows"></div>
+  </section>
 
-        closeModalButton.addEventListener('click', closeComingSoonModal);
-        modal.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                closeComingSoonModal();
-            }
-        });
-    </script>
+  <!-- Language -->
+  <section id="lang" class="sheet short" aria-label="Language" hidden>
+    <h2 class="fat">Language</h2>
+    <p class="lead">Choose a language.</p>
+    <div class="grid" id="ports"></div>
+  </section>
+</main>
 
+<footer>
+  <a href="/privacy-policy/">Privacy Policy</a><a href="/terms-of-service/">Terms of Service</a><a href="/delete-account/">Delete Account</a>
+  <div style="margin-top:10px">404chenhavefun@gmail.com · <a href="https://x.com/404chenhavefun" target="_blank" rel="noopener">@404chen</a></div>
+  <div style="margin-top:10px;opacity:.6">&copy; 2026 Pocony App</div>
+</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+// ---- Tabs
+function route(){const h=decodeURIComponent(location.hash.slice(1));
+const id=h=='wiki'?'wiki':h=='wiki/update'?'guide':h.startsWith('wiki/')?'wlist':h=='language'?'lang':'home';
+$('home').hidden=id!='home';$('views').hidden=id=='home';
+['wiki','guide','wlist','lang'].forEach(x=>$(x).hidden=id!=x);
+$('b-wiki').classList.toggle('on',h.startsWith('wiki'));$('b-lang').classList.toggle('on',h=='language');
+if(id=='wlist')renderList(h.slice(5));scrollTo(0,0)}
+addEventListener('hashchange',route);
+[['wiki','wiki'],['lang','language']].forEach(([id,h])=>$('b-'+id).addEventListener('click',e=>{if(location.hash=='#'+h){e.preventDefault();location.hash='#home'}}));
+
+// ---- Guide (pages from the in-game tutorial)
+const P=[
+['0001','Welcome, this is your balcony','All plants grow based on real time and weather'],
+['0002','First, find the button that looks like an envelope','Tap the package. It contains your starter gear'],
+['0003','Next, browse through the buttons to find this animal','It is soil. Place it in a pot before you can plant anything'],
+['0004','You will eventually end up with a potted plant like this','You need to find seeds first. With more pots, you can grow more plants'],
+// ['0006',"Now let's go over the buttons",'Use the garden shears to remove weeds. Weeds slow down flower growth'],
+// ['0007','This hand harvests plants','Harvesting when a plant is fully mature gives double the crops'],
+// ['0008','Each watering raises moisture by 10',"Moisture depends on the soil's water retention and resets every day"],
+// ['0009','This is the collection book. This one is for plants','You can also find weather, soil, and locked collections'],
+// ['0010','Once you have enough plants, it is time to level up','Tip: having a variety of plants makes it easier to unlock level ups'],
+// ['0011','A random plant is mailed to your mailbox every day. Remember to check it',''],
+// ['0012','This is reputation. You cannot use it yet, but you can earn it by trading items',''],
+['0005','These are points. They can only be bought with real money, no other way','']
+['0006','Long press the App icon and tap the WIDGET icon \nto add widgets to your home screen','']
+];
+let cur=0,dir=1;
+function render(){
+  const [n,t,d]=P[cur],last=cur==P.length-1;
+  $('step').textContent=`STEP ${cur+1}/${P.length}`;
+  $('fill').style.width=((cur+1)/P.length*100)+'%';
+  
+  $('page').className='page'+(dir<0?' back':'');
+  $('page').innerHTML=`<h2></h2><p></p><div class="shot" style="background-image:url(./tutorial/tutorial_${n}.png)">${cur+1}</div>`;
+  $('page').querySelector('h2').textContent=t;
+  $('page').querySelector('p').textContent=d;
+  $('page').style.display='none';$('page').offsetHeight;$('page').style.display='';
+  $('dots').innerHTML=P.map((_,i)=>`<b class="${i==cur?'on':''}"></b>`).join('');
+  $('next').textContent=last?'Done':'Continue';
+}
+function go(d){
+  if(d>0&&cur==P.length-1){location.hash='#wiki';return}
+  if(d<0&&cur==0){location.hash='#wiki';return}
+  const n=cur+d;if(n<0||n>=P.length)return;dir=d;cur=n;render();
+}
+$('prev').onclick=()=>go(-1);$('next').onclick=()=>go(1);
+document.addEventListener('keydown',e=>{if($('guide').hidden)return;if(e.key=='ArrowRight')go(1);if(e.key=='ArrowLeft')go(-1)});
+let sx=null;
+$('guide').addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+$('guide').addEventListener('touchend',e=>{if(sx==null)return;const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)go(dx<0?1:-1);sx=null});
+render();route();
+
+// ---- Wiki data (wiki.json): each new "type" becomes a button, pressing it lists its items
+let DATA=[];
+function buildTypes(){
+  document.querySelectorAll('.wt').forEach(e=>e.remove());
+  [...new Set(DATA.map(i=>i.type))].forEach(t=>{
+    const a=document.createElement('a');a.className='card wt';a.href='#wiki/'+encodeURIComponent(t);
+    const n=DATA.filter(i=>i.type==t).length;
+    a.innerHTML='<span class="fl">📂</span><span><b></b><small>'+n+' entries</small></span>';
+    a.querySelector('b').textContent=t;$('wgrid').insertBefore(a,$('addwiki'));
+  });
+}
+function renderList(t){
+  $('wtitle').textContent=t;$('wrows').innerHTML='';
+  DATA.filter(i=>i.type==t).forEach(i=>{
+    const e=document.createElement('div');e.className='entry';
+    e.innerHTML='<div class="im"></div><div><h3></h3><p></p></div>';
+    e.querySelector('.im').style.backgroundImage='url("'+encodeURI(i.image||'')+'")';
+    e.querySelector('h3').textContent=i.title||'';e.querySelector('p').textContent=i.text||'';
+    $('wrows').appendChild(e);
+  });
+}
+$('wback').onclick=()=>{location.hash='#wiki'};
+fetch('./wiki.json').then(r=>r.json()).then(d=>{DATA=d.items||[];buildTypes();route()}).catch(()=>{});
+
+// ---- Language / Wiki placeholders
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2000)}
+[['🇺🇸','English','English'],['🇯🇵','Japanese','日本語']].forEach(([f,n,l])=>{
+  const b=document.createElement('button');b.className='card';
+  b.innerHTML=`<span class="fl">${f}</span><span>${n}<small>${l}</small></span>`;
+  b.onclick=()=>toast('Coming soon');$('ports').appendChild(b);
+});
+$('addwiki').onclick=()=>toast('Coming soon');
+document.querySelectorAll('[data-store]').forEach(b=>b.onclick=()=>alert(b.dataset.store+': coming soon'));
+</script>
 </body>
 </html>

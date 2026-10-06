@@ -1,0 +1,9 @@
+{
+  "items": [
+    { "type": "Plants",  "image": "./wiki/lavender.png", "title": "Lavender", "text": "A calm purple flower. Grows slowly but gives double crops when harvested fully mature." },
+    { "type": "Plants",  "image": "./wiki/mint.png",     "title": "Mint",     "text": "Fast growing herb. Likes moist soil and spreads quickly, so remember to water it." },
+    { "type": "Weather", "image": "./wiki/sunny.png",    "title": "Sunny",    "text": "Clear sky. Soil dries faster, so plants need more watering." },
+    { "type": "Weather", "image": "./wiki/rain.png",     "title": "Rain",     "text": "Real rain outside means rain on your balcony. Moisture goes up on its own." },
+    { "type": "Soil",    "image": "./wiki/loam.png",     "title": "Loam",     "text": "Balanced soil with good water retention. A safe choice for any starter pot." }
+  ]
+}
