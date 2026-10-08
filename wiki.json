@@ -46,13 +46,13 @@
       "type": "Plants",  
       "image": "./wiki/resourse/quality1.png", 
       "title": "Decay Quality", 
-      "text": "Low quality yield obtained when all growing conditions remain poor. Yields more reputation than Normal quality when appraised." 
+      "text": "Low quality yield obtained when all growing conditions remain poor. Yields more Conys than Normal quality when appraised." 
     },
     { 
       "type": "Plants",  
       "image": "./wiki/resourse/quality2.png", 
       "title": "Star Quality", 
-      "text": "High quality yield obtained when all growing conditions are kept perfect. Yields the highest reputation when appraised." 
+      "text": "High quality yield obtained when all growing conditions are kept perfect. Yields the highest Conys when appraised." 
     },
     { 
       "type": "Tools",  
@@ -86,9 +86,9 @@
     },
     { 
       "type": "Tools",    
-      "image": "./wiki/tools/ui_all_reputation.png",     
-      "title": "Reputation",     
-      "text": "This is reputation. You can earn it by trading items via mail." 
+      "image": "./wiki/tools/ui_all_conys.png",     
+      "title": "Conys",     
+      "text": "This is Conys. You can earn it by trading items via mail." 
     },
     { 
       "type": "Tools",    
