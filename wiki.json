@@ -1,6 +1,60 @@
 {
   "items": [
     { 
+      "type": "Weathers",  
+      "image": "./wiki/resourse/soilS.png", 
+      "title": "S Size Weather", 
+      "text": "Keep starving throughout the growth cycle to obtain this quality. Weather effect lasts for 2 days." 
+    },
+    { 
+      "type": "Weathers",  
+      "image": "./wiki/resourse/soilM.png", 
+      "title": "M Size Weather", 
+      "text": "Slightly starve during the growth cycle to obtain this quality. Weather effect lasts for 3 days." 
+    },
+    { 
+      "type": "Weathers",  
+      "image": "./wiki/resourse/soilL.png", 
+      "title": "L Size Weather", 
+      "text": "Maintain zero hunger throughout the growth cycle to obtain this quality. Weather effect lasts for 5 days." 
+    },
+    { 
+      "type": "Soils",  
+      "image": "./wiki/resourse/soilS.png", 
+      "title": "S Size Soil", 
+      "text": "Keep starving throughout the growth cycle to obtain this quality. Has a 50% chance to turn into Barren Soil after harvest." 
+    },
+    { 
+      "type": "Soils",  
+      "image": "./wiki/resourse/soilM.png", 
+      "title": "M Size Soil", 
+      "text": "Slightly starve during the growth cycle to obtain this quality. Has a 40% chance to degrade to S Size after harvest." 
+    },
+    { 
+      "type": "Soils",  
+      "image": "./wiki/resourse/soilL.png", 
+      "title": "L Size Soil", 
+      "text": "Maintain zero hunger throughout the growth cycle to obtain this quality. Has a 20% chance to degrade to M Size after harvest." 
+    },
+    { 
+      "type": "Plants",  
+      "image": "./wiki/resourse/quality0.png", 
+      "title": "Normal Quality", 
+      "text": "Standard quality awarded when growing conditions are not fully met." 
+    },
+    { 
+      "type": "Plants",  
+      "image": "./wiki/resourse/quality1.png", 
+      "title": "Decay Quality", 
+      "text": "Low quality yield obtained when all growing conditions remain poor. Yields more reputation than Normal quality when appraised." 
+    },
+    { 
+      "type": "Plants",  
+      "image": "./wiki/resourse/quality2.png", 
+      "title": "Star Quality", 
+      "text": "High quality yield obtained when all growing conditions are kept perfect. Yields the highest reputation when appraised." 
+    },
+    { 
       "type": "Tools",  
       "image": "./wiki/tools/UI_weed.png", 
       "title": "Garden Shears", 
@@ -21,7 +75,7 @@
     { 
       "type": "Tools", 
       "image": "./wiki/tools/UI_spade.png",    
-      "title": "Trowel",    
+      "title": "Spade",    
       "text": "Use the spade to scoop soil out of pots. Swapping soil to match your plants helps them thrive." 
     },
     { 
