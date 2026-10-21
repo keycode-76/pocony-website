@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pocony: Your Pocket Balcony</title>
 <link rel="icon" href="./logo.png" type="image/png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 <style>
 :root{--paper:#ecdcc5;--white:#FDF5E6;--ink:#000;--sub:#d8861e;--ter:#c96400;--gray:#d5cbb3;
@@ -30,6 +31,21 @@ header .fat{font-size:30px}
 .btn.solid{background:var(--ink);color:#fff;font-weight:bold}
 .btn[disabled]{border:1px dashed rgba(0,0,0,.4);color:rgba(0,0,0,.4);cursor:not-allowed;transform:none}
 .btn:focus-visible,.tab:focus-visible,.card:focus-visible{outline:3px solid var(--sub);outline-offset:2px}
+/* login */
+.acct{position:relative;display:inline-flex}
+#b-login{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;line-height:30px}
+.menu{position:absolute;right:0;top:calc(100% + 6px);background:var(--white);border:1.5px solid var(--ink);min-width:120px;z-index:30}
+.mi{display:block;padding:10px 14px;font-size:16px;border-bottom:1px solid rgba(0,0,0,.2);white-space:nowrap}
+.menu button{width:100%;font:inherit;font-size:16px;background:none;border:0;padding:10px 14px;cursor:pointer;text-align:left}
+.menu button:hover{background:var(--gray)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;display:grid;place-items:center;padding:15px}
+.dlg{background:var(--paper);border:1.5px solid var(--ink);padding:24px 22px;width:100%;max-width:380px;box-shadow:0 20px 40px rgba(0,0,0,.35)}
+.dlg h2{font-size:34px;margin:0 0 16px}
+.dlg input{display:block;width:100%;font:inherit;font-size:16px;padding:10px 12px;margin-bottom:10px;background:var(--white);color:var(--ink);border:1.5px dashed var(--ink);border-radius:0}
+.dlg input:focus-visible{outline:3px solid var(--sub);outline-offset:2px}
+.dlg .btn{width:100%;margin-top:6px}
+.dlg .err{color:#c0392b;font-size:15px;min-height:22px;margin:0 0 4px}
+.dlg .x{float:right;width:34px;height:34px;font-size:18px}
 /* hero */
 .hero{max-width:1100px;margin:auto;padding:36px 20px;display:grid;gap:28px;align-items:center;grid-template-columns:1fr 280px}
 .hero h1{margin:6px 0 14px;line-height:0}
@@ -94,7 +110,8 @@ footer a{color:var(--ter);margin:0 8px}
 </head>
 <body>
 <header><div><a class="brand" href="#home"><img src="./logo.png" alt="" onerror="this.style.display='none'"></a>
-<nav class="nav"><a class="btn" id="b-wiki" href="#wiki">Wiki</a><a class="btn" id="b-lang" href="#language">Language</a></nav></div></header>
+<nav class="nav"><a class="btn" id="b-wiki" href="#wiki">Wiki</a><a class="btn" id="b-lang" href="#language">Language</a>
+<span class="acct"><button class="btn" id="b-login" type="button">Login</button><span class="menu" id="umenu" hidden><span class="mi" id="m-conys">conys: -</span><span class="mi" id="m-pts">points: -</span><button type="button" id="logout">Logout</button></span></span></nav></div></header>
 
 <section class="hero" id="home">
   <div>
@@ -148,6 +165,18 @@ footer a{color:var(--ter);margin:0 8px}
   </section>
 </main>
 
+<div class="modal" id="lmodal" hidden>
+  <form class="dlg" id="lform" role="dialog" aria-modal="true" aria-label="Login">
+    <button class="btn x" type="button" id="lclose" aria-label="Close">✕</button>
+    <h2 class="fat">Login</h2>
+    <input id="lemail" type="email" placeholder="Email" autocomplete="email" required>
+    <input id="lpass" type="password" placeholder="Password" autocomplete="current-password" required>
+    <p class="err" id="lerr" role="alert"></p>
+    <button class="btn solid" type="submit" id="lsubmit">Sign in with Email</button>
+    <button class="btn" type="button" id="lgoogle">Sign in with Google</button>
+  </form>
+</div>
+
 <footer>
   <a href="/privacy-policy/">Privacy Policy</a><a href="/terms-of-service/">Terms of Service</a><a href="/delete-account/">Delete Account</a>
   <div style="margin-top:10px">404chenhavefun@gmail.com · <a href="https://x.com/404chenhavefun" target="_blank" rel="noopener">@404chen</a></div>
@@ -179,7 +208,7 @@ const P=[
 // ['0010','Once you have enough plants, it is time to level up','Tip: having a variety of plants makes it easier to unlock level ups'],
 // ['0011','A random plant is mailed to your mailbox every day. Remember to check it',''],
 // ['0012','This is reputation. You cannot use it yet, but you can earn it by trading items',''],
-['0005','These are points. They can only be bought with real money, no other way','']
+['0005','These are points. They can only be bought with real money, no other way',''],
 ['0006','Long press the App icon and tap the WIDGET icon \nto add widgets to your home screen','']
 ];
 let cur=0,dir=1;
@@ -241,6 +270,47 @@ function toast(m){const t=document.createElement('div');t.className='toast';t.te
 });
 $('addwiki').onclick=()=>toast('Coming soon');
 document.querySelectorAll('[data-store]').forEach(b=>b.onclick=()=>alert(b.dataset.store+': coming soon'));
+
+// ---- Login (Supabase, same cloud as the app; sign-in only)
+const SUPABASE_URL='https://rbrtoiuyugftphkyphdi.supabase.co',SUPABASE_KEY='sb_publishable__6LhUovLcfWv23jJUuePuw_xfAX7EZV';
+let sb=null;
+try{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY)}catch(e){}
+const lb=$('b-login'),lm=$('lmodal'),um=$('umenu');
+let me=null;
+function nameOf(u){const m=u.user_metadata||{};return m.username||m.user_name||m.name||m.full_name||(u.email||'').split('@')[0]||'User'}
+function setUser(u,p){me=u;lb.textContent=u?(p&&p.display_name||nameOf(u)):'Login';lb.classList.toggle('on',!!u);um.hidden=true;
+  $('m-conys').textContent='conys: '+(p&&p.conys!=null?p.conys:'-');$('m-pts').textContent='points: '+(p&&p.points!=null?p.points:'-')}
+function openLogin(){$('lerr').textContent='';lm.hidden=false;$('lemail').focus()}
+function closeLogin(){lm.hidden=true;$('lpass').value=''}
+// load profile from pocony_users; no row = not an app account -> sign out (sign-in only)
+async function guardNew(u){
+  const {data,error}=await sb.from('pocony_users').select('display_name,points,conys').eq('uid',u.id).maybeSingle();
+  if(!error&&!data){await sb.auth.signOut();setUser(null);openLogin();$('lerr').textContent='No account found. Please create one in the app first.';return {blocked:true}}
+  return {blocked:false,p:data}}
+lb.onclick=()=>{if(me)um.hidden=!um.hidden;else openLogin()};
+$('lclose').onclick=closeLogin;
+lm.addEventListener('mousedown',e=>{if(e.target==lm)closeLogin()});
+addEventListener('keydown',e=>{if(e.key=='Escape'){closeLogin();um.hidden=true}});
+document.addEventListener('click',e=>{if(!e.target.closest('.acct'))um.hidden=true});
+$('logout').onclick=async()=>{um.hidden=true;if(sb)await sb.auth.signOut();setUser(null)};
+$('lform').onsubmit=async e=>{
+  e.preventDefault();const err=$('lerr'),btn=$('lsubmit');err.textContent='';
+  if(!sb){err.textContent='Login is not configured.';return}
+  btn.disabled=true;
+  const {data,error}=await sb.auth.signInWithPassword({email:$('lemail').value.trim(),password:$('lpass').value});
+  btn.disabled=false;
+  if(error){err.textContent=error.message;return}
+  const g=await guardNew(data.user);if(!g.blocked){closeLogin();setUser(data.user,g.p)}};
+$('lgoogle').onclick=async()=>{
+  if(!sb){$('lerr').textContent='Login is not configured.';return}
+  const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});
+  if(error)$('lerr').textContent=error.message};
+if(sb){
+  sb.auth.getSession().then(({data})=>{const u=data.session&&data.session.user;if(u)guardNew(u).then(g=>{if(!g.blocked)setUser(u,g.p)})});
+  sb.auth.onAuthStateChange((ev,ses)=>{setTimeout(()=>{
+    if(ev=='SIGNED_OUT')setUser(null);
+    else if(ses&&ses.user)guardNew(ses.user).then(g=>{if(!g.blocked){setUser(ses.user,g.p);closeLogin()}})},0)});
+}
 </script>
 </body>
 </html>
