@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/basic-payment=success", "destination": "/" },
+    { "source": "/value-payment=success", "destination": "/" }
+  ]
+}

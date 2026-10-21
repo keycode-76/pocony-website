@@ -8,15 +8,17 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 <style>
-:root{--paper:#ecdcc5;--white:#FDF5E6;--ink:#000;--sub:#d8861e;--ter:#c96400;--gray:#d5cbb3;
+:root{--paper:#ecdcc5;--white:#FDF5E6;--ink:#000;--sub:#d8861e;--ter:#c96400;--accent:#c96400;--gray:#d5cbb3;
 --mono:Consolas,"Courier New",monospace;--fat:"VT323",Consolas,monospace}
 @media(prefers-color-scheme:dark){:root{--bg:#2b2318}}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background-color:#c0bdaa;background-image:linear-gradient(rgba(0,0,0,.08) 2px,transparent 2px),linear-gradient(90deg,rgba(0,0,0,.08) 2px,transparent 2px);background-size:24px 24px;min-height:100vh;color:var(--ink);font:18px/1.5 var(--mono);letter-spacing:.1px;overflow-x:hidden}
+body{display:flex;flex-direction:column;background-color:#c0bdaa;background-image:linear-gradient(rgba(0,0,0,.08) 2px,transparent 2px),linear-gradient(90deg,rgba(0,0,0,.08) 2px,transparent 2px);background-size:24px 24px;min-height:100vh;color:var(--ink);font:16px/1.5 var(--mono);letter-spacing:.1px;overflow-x:hidden}
 img{max-width:100%}
 .fat{font-family:var(--fat);font-weight:bold;color:var(--white);-webkit-text-stroke:0;
 text-shadow:-2px 0 var(--sub),2px 0 var(--sub),0 -2px var(--sub),0 2px var(--sub),-1px -1px var(--sub),1px 1px var(--sub),-1px 1px var(--sub),1px -1px var(--sub);margin:0}
+h1,h2,h3,h4,h5,h6,.fat{font-weight:400}
+h1,h2,h3,h4,h5,h6{color:var(--ink)}
 header{position:sticky;top:0;z-index:5;background:var(--paper);padding:10px 16px}
 header div{max-width:1100px;margin:auto;display:flex;align-items:center;gap:10px}
 .brand{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none}
@@ -27,10 +29,15 @@ header .brand img{width:36px;height:36px;image-rendering:pixelated}
 header .fat{font-size:30px}
 /* square outline buttons (BottomBtn) */
 .btn{font:inherit;font-size:16px;color:var(--ink);background:transparent;border:1.5px solid var(--ink);padding:10px 18px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px}
+.icon{width:20px;height:20px;display:block;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.card .icon{width:24px;height:24px}
 .btn:active{transform:translateY(2px)}
 .btn.solid{background:var(--ink);color:#fff;font-weight:bold}
 .btn[disabled]{border:1px dashed rgba(0,0,0,.4);color:rgba(0,0,0,.4);cursor:not-allowed;transform:none}
 .btn:focus-visible,.tab:focus-visible,.card:focus-visible{outline:3px solid var(--sub);outline-offset:2px}
+/* 黑底按鈕：停用或按下時文字都保持可見 */
+.btn.solid[disabled]{background:var(--gray);color:rgba(0,0,0,.45);border:1px dashed rgba(0,0,0,.4)}
+.btn.solid:active,.btn.on:active{background:var(--ink);color:#fff}
 /* login */
 .acct{position:relative;display:inline-flex}
 #b-login{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;line-height:30px}
@@ -38,6 +45,12 @@ header .fat{font-size:30px}
 .mi{display:block;padding:10px 14px;font-size:16px;border-bottom:1px solid rgba(0,0,0,.2);white-space:nowrap}
 .menu button{width:100%;font:inherit;font-size:16px;background:none;border:0;padding:10px 14px;cursor:pointer;text-align:left}
 .menu button:hover{background:var(--gray)}
+.menu #m-pts{width:100%;font:inherit;font-size:16px;background:none;border:0;padding:10px 14px;cursor:pointer;text-align:left;color:var(--ink)}
+.menu #m-pts:hover{background:var(--gray)}
+.points-pack{background:var(--sub);color:var(--ink)}
+.points-pack{width:100%;justify-content:space-between;text-align:left}
+.points-pack b{margin-left:auto;text-align:right;white-space:nowrap}
+.points-pack:hover{background:var(--accent);color:var(--white)}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;display:grid;place-items:center;padding:15px}
 .dlg{background:var(--paper);border:1.5px solid var(--ink);padding:24px 22px;width:100%;max-width:380px;box-shadow:0 20px 40px rgba(0,0,0,.35)}
 .dlg h2{font-size:34px;margin:0 0 16px}
@@ -46,6 +59,34 @@ header .fat{font-size:30px}
 .dlg .btn{width:100%;margin-top:6px}
 .dlg .err{color:#c0392b;font-size:15px;min-height:22px;margin:0 0 4px}
 .dlg .x{float:right;width:34px;height:34px;font-size:18px}
+/* language folders */
+.ftool{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:16px 0 4px;flex-wrap:wrap}
+.sorts{display:flex;gap:6px}.sorts .btn{min-height:36px;padding:2px 12px;font-size:15px}
+.frow{display:flex;align-items:center;gap:10px;margin-top:10px;background:var(--white);border:1px solid var(--ink);padding:10px}
+.frow .meta{flex:1;min-width:0}
+.frow .fn{font:inherit;font-size:15px;font-weight:400;background:none;border:0;padding:0;cursor:pointer;text-align:left;color:var(--ink);text-decoration:none;overflow-wrap:anywhere}
+.frow .fn:hover{text-decoration:underline}
+.frow small{display:block;color:var(--accent);font-size:13px}
+.frow .sq{width:40px;height:40px;font-size:18px;flex:none}
+.frow .sq.lk{width:auto;min-width:56px;padding:0 8px;font-size:16px;display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.frow .sq.lk span{line-height:1;display:block}
+.empty{color:var(--accent);margin:18px 0 0}
+.drop{border:1.5px dashed var(--ink);background:var(--white);padding:28px 12px;text-align:center;cursor:pointer;overflow-wrap:anywhere}
+.drop.over{background:var(--sub)}
+/* 拖曳區：ICON 與文字置中 */
+.drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.drop .icon{margin:0 auto}
+/* 刪除按鈕不要邊框 */
+#fdel{margin-left:auto}
+/* 檔名不要粗體 */
+.frow .fn{font-weight:400!important}
+#ptitle{font-family:var(--mono);font-weight:400;color:var(--ink);text-shadow:none;font-size:18px}
+.dlg.wide{max-width:min(94vw,960px)}
+.dlg .stabs{display:flex;gap:4px;flex-wrap:wrap;margin:0 0 8px}
+.dlg .stabs .btn{width:auto;margin:0;min-height:34px;padding:2px 10px;font-size:15px}
+.tbl{overflow:auto;max-height:65vh;border:1px solid var(--ink);background:var(--white)}
+.tbl table{border-collapse:collapse;font-size:13px}
+.tbl td{border:1px solid rgba(0,0,0,.25);padding:3px 8px;white-space:pre-wrap;max-width:360px;vertical-align:top}
 /* hero */
 .hero{max-width:1100px;margin:auto;padding:36px 20px;display:grid;gap:28px;align-items:center;grid-template-columns:1fr 280px}
 .hero h1{margin:6px 0 14px;line-height:0}
@@ -60,17 +101,20 @@ header .brand img.ttl{height:30px;width:auto}
 .tabs{max-width:560px;margin:0 auto;padding:0 15px;display:flex;gap:2px}
 .tab{flex:1;height:50px;font:inherit;font-size:18px;font-weight:bold;border:1.5px solid var(--ink);border-bottom:0;background:var(--gray);color:rgba(0,0,0,.55);cursor:pointer;transform:translateY(4px);transition:transform .08s}
 .tab[aria-selected=true]{background:var(--paper);color:var(--ink);transform:none;height:54px;align-self:flex-end}
-.panel{max-width:560px;margin:24px auto 48px;padding:0 15px}
+.panel{flex:1;width:100%;max-width:560px;margin:24px auto 48px;padding:0 15px}
 .sheet{background:var(--paper);border:1.5px solid var(--ink);padding:20px 22px 20px;min-height:600px;display:flex;flex-direction:column}
 [hidden]{display:none!important}
-a.card{text-decoration:none;color:inherit}
+a.card{text-decoration:none;color:var(--ink)}
 .entry{display:flex;gap:12px;margin-top:12px;background:var(--white);border:1px solid var(--ink);padding:10px;min-height:116px}
 .entry .im{width:96px;height:96px;flex:none;border:1px solid var(--ink);background:var(--gray) center/cover no-repeat;image-rendering:pixelated}
-.entry h3{margin:0 0 4px;font-size:20px}.entry p{margin:0;color:var(--ter);font-size:16px;line-height:1.5}
+.entry h3{margin:0 0 4px;font-size:20px}.entry p{margin:0;color:var(--accent);font-size:14px;line-height:1.5}
 .sheet.short{min-height:0}
 .toast{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--white);color:var(--ink);padding:14px 22px;box-shadow:0 4px 12px rgba(0,0,0,.25);z-index:20;text-align:center}
 .top{display:flex;align-items:center;gap:12px}
 .sq{width:40px;height:40px;font:bold 22px var(--mono);background:none;border:1.5px solid var(--ink);cursor:pointer}
+.sq.icon-button,#prev,#wback,#fback,.btn.x{border:0;background:transparent}
+.sq.icon-button{padding:0}
+.btn.x{padding:0}
 .sq:disabled{opacity:.3;cursor:default}
 .step{font-weight:bold;letter-spacing:2px;white-space:nowrap}
 .bar{flex:1;height:5px;background:rgba(0,0,0,.2)}
@@ -80,7 +124,7 @@ a.card{text-decoration:none;color:inherit}
 .page.back{animation-name:turnb}
 @keyframes turnb{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
 .page h2{font-size:26px;line-height:1.2;margin:0 0 10px}
-.page p{margin:0 0 16px;color:var(--ter);line-height:1.6}
+.page p{margin:0 0 16px;color:var(--accent);line-height:1.6}
 .shot{aspect-ratio:1;border:1px solid var(--ink);background:var(--gray) center/cover no-repeat;display:grid;place-items:center;font-family:var(--fat);font-size:28px;color:var(--sub)}
 .dots{display:flex;gap:6px;justify-content:center;margin:0 0 12px}
 .dots b{width:6px;height:6px;background:var(--sub);opacity:.35}
@@ -88,10 +132,11 @@ a.card{text-decoration:none;color:inherit}
 .full{width:100%;height:48px}
 /* board tab */
 .sheet h2.fat{font-size:40px}
-.lead{color:var(--ter);margin:4px 0 16px}
+.lead{color:var(--ink);margin:4px 0 16px}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
 .card{font:inherit;text-align:left;background:var(--white);border:1px solid var(--ink);padding:12px;cursor:pointer;display:flex;gap:10px;align-items:center;min-height:64px}
 .card .fl{font-size:28px}
+.card b{font-weight:400}
 .card small{display:block;color:var(--sub)}
 .card[aria-pressed=true]{border:2px solid var(--sub);background:var(--sub);color:var(--ink)}
 .card[aria-pressed=true] small{color:var(--ink)}
@@ -102,8 +147,8 @@ a.card{text-decoration:none;color:inherit}
 .done p{margin:0 0 10px}
 .sail{animation:sway 1.2s ease-in-out infinite;display:inline-block}
 @keyframes sway{50%{transform:translateY(-4px) rotate(-4deg)}}
-footer{background:var(--paper);padding:22px 16px;text-align:center;font-size:15px}
-footer a{color:var(--ter);margin:0 8px}
+footer{background:var(--paper);padding:22px 16px;text-align:center;font-size:14px}
+footer a{color:var(--accent);margin:0 8px}
 @media(max-width:760px){.hero{grid-template-columns:1fr}.phone{order:-1;height:380px;width:190px}.hero p{max-width:none}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -111,7 +156,7 @@ footer a{color:var(--ter);margin:0 8px}
 <body>
 <header><div><a class="brand" href="#home"><img src="./logo.png" alt="" onerror="this.style.display='none'"></a>
 <nav class="nav"><a class="btn" id="b-wiki" href="#wiki">Wiki</a><a class="btn" id="b-lang" href="#language">Language</a>
-<span class="acct"><button class="btn" id="b-login" type="button">Login</button><span class="menu" id="umenu" hidden><span class="mi" id="m-conys">conys: -</span><span class="mi" id="m-pts">points: -</span><button type="button" id="logout">Logout</button></span></span></nav></div></header>
+<span class="acct"><button class="btn" id="b-login" type="button">Login</button><span class="menu" id="umenu" hidden><span class="mi" id="m-conys">conys: -</span><button class="mi" id="m-pts" type="button">points: -</button><button type="button" id="logout">Logout</button></span></span></nav></div></header>
 
 <section class="hero" id="home">
   <div>
@@ -132,7 +177,7 @@ footer a{color:var(--ter);margin:0 8px}
   <!-- Guide -->
   <section id="guide" class="sheet" aria-label="Guide">
     <div class="top">
-      <button class="sq" id="prev" aria-label="Previous page">&lt;</button>
+      <button class="sq" id="prev" aria-label="Previous page"></button>
       <span class="step" id="step"></span>
       <div class="bar"><i id="fill"></i></div>
     </div>
@@ -146,28 +191,35 @@ footer a{color:var(--ter);margin:0 8px}
     <h2 class="fat">Wiki</h2>
     <p class="lead">Guides and tips for Pocony.</p>
     <div class="grid" id="wgrid">
-      <a class="card" href="#wiki/update"><span class="fl">📖</span><span>NEW UPDATE<small>Getting started</small></span></a>
-      <button class="card" id="addwiki"><span class="fl">＋</span><span>Add a page<small>Text &amp; images</small></span></button>
+      <a class="card" href="#wiki/update"><span class="fl" data-icon="book-open"></span><span>NEW UPDATE<small>Getting started</small></span></a>
+      <button class="card" id="addwiki"><span class="fl" data-icon="plus"></span><span>Add a page<small>Text &amp; images</small></span></button>
     </div>
   </section>
 
   <!-- Wiki entries -->
   <section id="wlist" class="sheet short" aria-label="Wiki list" hidden>
-    <div class="top"><button class="sq" id="wback" aria-label="Back">&lt;</button><h2 class="fat" id="wtitle" style="margin:0"></h2></div>
+    <div class="top"><button class="sq" id="wback" aria-label="Back"></button><h2 class="fat" id="wtitle" style="margin:0"></h2></div>
     <div id="wrows"></div>
   </section>
 
   <!-- Language -->
   <section id="lang" class="sheet short" aria-label="Language" hidden>
     <h2 class="fat">Language</h2>
-    <p class="lead">Choose a language.</p>
+    <p class="lead">If you can't find the translation you want, you can download the latest file to translate. The most liked file may be used. Files that do not qualify will be deleted. Daily uploads are limited.</p>
     <div class="grid" id="ports"></div>
+  </section>
+
+  <!-- Language folder -->
+  <section id="lfolder" class="sheet short" aria-label="Folder" hidden>
+    <div class="top"><button class="sq" id="fback" aria-label="Back"></button><h2 class="fat" id="ftitle" style="margin:0;font-size:32px;min-width:0;overflow-wrap:anywhere"></h2><button class="sq icon-button" id="fdel" hidden aria-label="Delete folder" title="Delete folder" style="margin-left:auto"></button></div>
+    <div class="ftool" id="ftool"><button class="btn solid" id="fup" type="button"><span data-icon="upload"></span>Upload</button><span class="sorts"><button class="btn on" type="button" data-sort="date">Date</button><button class="btn" type="button" data-sort="likes">Likes</button></span></div>
+    <div id="lrows"></div>
   </section>
 </main>
 
 <div class="modal" id="lmodal" hidden>
   <form class="dlg" id="lform" role="dialog" aria-modal="true" aria-label="Login">
-    <button class="btn x" type="button" id="lclose" aria-label="Close">✕</button>
+    <button class="btn x" type="button" id="lclose" aria-label="Close"></button>
     <h2 class="fat">Login</h2>
     <input id="lemail" type="email" placeholder="Email" autocomplete="email" required>
     <input id="lpass" type="password" placeholder="Password" autocomplete="current-password" required>
@@ -175,6 +227,52 @@ footer a{color:var(--ter);margin:0 8px}
     <button class="btn solid" type="submit" id="lsubmit">Sign in with Email</button>
     <button class="btn" type="button" id="lgoogle">Sign in with Google</button>
   </form>
+</div>
+
+<div class="modal" id="shop-modal" hidden>
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="shop-title">
+    <button class="btn x" type="button" data-close="shop-modal" aria-label="Close"></button>
+    <h2 class="fat" id="shop-title">SHOP</h2>
+    <p>You've found the points shop! The prices here are the same as elsewhere, but you can get a few more points.</p>
+    <p class="err" id="shop-error" role="alert"></p>
+   <button class="btn points-pack" type="button" data-points-pack="basic">
+  115 Points Basic Refill<br>(+15 Free!)<b>2.99</b>
+</button>
+
+<button class="btn points-pack" type="button" data-points-pack="value">
+  365 Points Value Pack<br>(+50+15 Free!)<b>6.99</b>
+</button>
+  </div>
+</div>
+
+<div class="modal" id="nmodal" hidden>
+  <form class="dlg" id="nform" aria-label="New folder">
+    <button class="btn x" type="button" data-close="nmodal" aria-label="Close"></button>
+    <h2 class="fat">New folder</h2>
+    <input id="nname" type="text" maxlength="40" placeholder="Name" autocomplete="off" required>
+    <p class="err" id="nerr" role="alert"></p>
+    <button class="btn solid" type="submit" id="nok">Create</button>
+  </form>
+</div>
+
+<div class="modal" id="umodal" hidden>
+  <div class="dlg" role="dialog" aria-label="Upload">
+    <button class="btn x" type="button" data-close="umodal" aria-label="Close"></button>
+    <h2 class="fat">Upload</h2>
+    <div class="drop" id="udrop" tabindex="0"><span data-icon="upload"></span><span id="uname"></span></div>
+    <input id="ufile" type="file" accept=".xlsx" hidden>
+    <p class="err" id="uerr" role="alert" style="margin-top:10px"></p>
+    <button class="btn solid" type="button" id="uok" hidden disabled>Confirm</button>
+  </div>
+</div>
+
+<div class="modal" id="pmodal" hidden>
+  <div class="dlg wide" role="dialog" aria-label="Preview">
+    <button class="btn x" type="button" data-close="pmodal" aria-label="Close"></button>
+    <h2 class="fat" id="ptitle" style="font-size:24px;overflow-wrap:anywhere"></h2>
+    <div class="stabs" id="ptabs"></div>
+    <div class="tbl" id="pbody"></div>
+  </div>
 </div>
 
 <footer>
@@ -185,13 +283,30 @@ footer a{color:var(--ter);margin:0 8px}
 
 <script>
 const $=id=>document.getElementById(id);
+const ICONS={
+  'arrow-left':'<line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline>',
+  'book-open':'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>',
+  'plus':'<line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>',
+  'folder':'<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>',
+  'globe':'<circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>',
+  'upload':'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line>',
+  'download':'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>',
+  'heart':'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8z"></path>',
+  'trash-2':'<polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6M14 11v6"></path><path d="M9 6V4h6v2"></path>',
+  'x':'<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>'
+};
+function icon(name,extra=''){return `<svg class="icon ${extra}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]||''}</svg>`}
+document.querySelectorAll('[data-icon]').forEach(el=>{el.innerHTML=icon(el.dataset.icon)});
+['prev','wback','fback'].forEach(id=>$(id).innerHTML=icon('arrow-left'));
+document.querySelectorAll('.btn.x').forEach(el=>el.innerHTML=icon('x'));
+$('fdel').innerHTML=icon('trash-2');
 // ---- Tabs
 function route(){const h=decodeURIComponent(location.hash.slice(1));
-const id=h=='wiki'?'wiki':h=='wiki/update'?'guide':h.startsWith('wiki/')?'wlist':h=='language'?'lang':'home';
+const id=h=='wiki'?'wiki':h=='wiki/update'?'guide':h.startsWith('wiki/')?'wlist':h=='language'?'lang':h.startsWith('language/')?'lfolder':'home';
 $('home').hidden=id!='home';$('views').hidden=id=='home';
-['wiki','guide','wlist','lang'].forEach(x=>$(x).hidden=id!=x);
-$('b-wiki').classList.toggle('on',h.startsWith('wiki'));$('b-lang').classList.toggle('on',h=='language');
-if(id=='wlist')renderList(h.slice(5));scrollTo(0,0)}
+['wiki','guide','wlist','lang','lfolder'].forEach(x=>$(x).hidden=id!=x);
+$('b-wiki').classList.toggle('on',h.startsWith('wiki'));$('b-lang').classList.toggle('on',h.startsWith('language'));
+if(id=='wlist')renderList(h.slice(5));if(id=='lfolder')openFolder(h.slice(9));if(id=='lang'&&ready)loadFolders();scrollTo(0,0)}
 addEventListener('hashchange',route);
 [['wiki','wiki'],['lang','language']].forEach(([id,h])=>$('b-'+id).addEventListener('click',e=>{if(location.hash=='#'+h){e.preventDefault();location.hash='#home'}}));
 
@@ -243,8 +358,7 @@ function buildTypes(){
   document.querySelectorAll('.wt').forEach(e=>e.remove());
   [...new Set(DATA.map(i=>i.type))].forEach(t=>{
     const a=document.createElement('a');a.className='card wt';a.href='#wiki/'+encodeURIComponent(t);
-    const n=DATA.filter(i=>i.type==t).length;
-    a.innerHTML='<span class="fl">📂</span><span><b></b><small>'+n+' entries</small></span>';
+    a.innerHTML='<span class="fl">'+icon('folder')+'</span><b></b>';
     a.querySelector('b').textContent=t;$('wgrid').insertBefore(a,$('addwiki'));
   });
 }
@@ -263,11 +377,7 @@ fetch('./wiki.json').then(r=>r.json()).then(d=>{DATA=d.items||[];buildTypes();ro
 
 // ---- Language / Wiki placeholders
 function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2000)}
-[['🇺🇸','English','English'],['🇯🇵','Japanese','日本語']].forEach(([f,n,l])=>{
-  const b=document.createElement('button');b.className='card';
-  b.innerHTML=`<span class="fl">${f}</span><span>${n}<small>${l}</small></span>`;
-  b.onclick=()=>toast('Coming soon');$('ports').appendChild(b);
-});
+
 $('addwiki').onclick=()=>toast('Coming soon');
 document.querySelectorAll('[data-store]').forEach(b=>b.onclick=()=>alert(b.dataset.store+': coming soon'));
 
@@ -277,9 +387,25 @@ let sb=null;
 try{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY)}catch(e){}
 const lb=$('b-login'),lm=$('lmodal'),um=$('umenu');
 let me=null;
+let checkoutStarting=false;
+const paymentReturnParams=new URLSearchParams(location.search);
+const paymentReturnPath=location.pathname.replace(/\/+$/,'');
+const paymentReturnRequested=paymentReturnPath.endsWith('/basic-payment=success')||
+  paymentReturnPath.endsWith('/value-payment=success')||
+  paymentReturnParams.get('basic-payment')==='success'||
+  paymentReturnParams.get('value-payment')==='success'||
+  paymentReturnParams.get('pocony_payment')==='success';
+if(paymentReturnRequested){
+  const returnUrl=new URL(location.href);
+  returnUrl.searchParams.delete('basic-payment');
+  returnUrl.searchParams.delete('value-payment');
+  returnUrl.searchParams.delete('pocony_payment');
+  if(paymentReturnPath.endsWith('/basic-payment=success')||paymentReturnPath.endsWith('/value-payment=success'))returnUrl.pathname='/';
+  history.replaceState(null,'',returnUrl.pathname+returnUrl.search+returnUrl.hash);
+}
 function nameOf(u){const m=u.user_metadata||{};return m.username||m.user_name||m.name||m.full_name||(u.email||'').split('@')[0]||'User'}
 function setUser(u,p){me=u;lb.textContent=u?(p&&p.display_name||nameOf(u)):'Login';lb.classList.toggle('on',!!u);um.hidden=true;
-  $('m-conys').textContent='conys: '+(p&&p.conys!=null?p.conys:'-');$('m-pts').textContent='points: '+(p&&p.points!=null?p.points:'-')}
+  $('m-conys').textContent='conys: '+(p&&p.conys!=null?p.conys:'-');$('m-pts').textContent='points: '+(p&&p.points!=null?p.points:'-');onAuth(u,p)}
 function openLogin(){$('lerr').textContent='';lm.hidden=false;$('lemail').focus()}
 function closeLogin(){lm.hidden=true;$('lpass').value=''}
 // load profile from pocony_users; no row = not an app account -> sign out (sign-in only)
@@ -288,9 +414,35 @@ async function guardNew(u){
   if(!error&&!data){await sb.auth.signOut();setUser(null);openLogin();$('lerr').textContent='No account found. Please create one in the app first.';return {blocked:true}}
   return {blocked:false,p:data}}
 lb.onclick=()=>{if(me)um.hidden=!um.hidden;else openLogin()};
+$('m-pts').onclick=()=>{um.hidden=true;if(!me){openLogin();return}openModal('shop-modal')};
+$('shop-modal').querySelectorAll('[data-points-pack]').forEach(button=>button.addEventListener('click',async()=>{
+  if(checkoutStarting)return;
+  const error=$('shop-error');error.textContent='';
+  if(!me||!sb){openLogin();return}
+  checkoutStarting=true;
+  const shop=$('shop-modal'),packButtons=[...shop.querySelectorAll('[data-points-pack]')],closeButton=shop.querySelector('[data-close="shop-modal"]');
+  packButtons.forEach(pack=>pack.disabled=true);
+  closeButton.disabled=true;
+  error.textContent='Opening secure checkout…';
+  error.style.color='var(--ink)';
+  document.querySelectorAll('body > header,body > section.hero,body > main,body > footer').forEach(el=>el.inert=true);
+  try{
+    const {data,error:invokeError}=await sb.functions.invoke('create-points-checkout',{body:{pack:button.dataset.pointsPack}});
+    if(invokeError)throw invokeError;
+    if(!data||!data.url)throw new Error('Checkout is not configured.');
+    location.assign(data.url);
+  }catch(e){
+    checkoutStarting=false;
+    document.querySelectorAll('body > header,body > section.hero,body > main,body > footer').forEach(el=>el.inert=false);
+    error.textContent='Could not start checkout. Please try again.';
+    error.style.color='';
+    packButtons.forEach(pack=>pack.disabled=false);
+    closeButton.disabled=false;
+  }
+}));
 $('lclose').onclick=closeLogin;
 lm.addEventListener('mousedown',e=>{if(e.target==lm)closeLogin()});
-addEventListener('keydown',e=>{if(e.key=='Escape'){closeLogin();um.hidden=true}});
+addEventListener('keydown',e=>{if(e.key=='Escape'){if(checkoutStarting)return;closeLogin();um.hidden=true;closeModal('shop-modal')}});
 document.addEventListener('click',e=>{if(!e.target.closest('.acct'))um.hidden=true});
 $('logout').onclick=async()=>{um.hidden=true;if(sb)await sb.auth.signOut();setUser(null)};
 $('lform').onsubmit=async e=>{
@@ -311,6 +463,193 @@ if(sb){
     if(ev=='SIGNED_OUT')setUser(null);
     else if(ses&&ses.user)guardNew(ses.user).then(g=>{if(!g.blocked){setUser(ses.user,g.p);closeLogin()}})},0)});
 }
+
+// ---- Language folders (table balcony_language + storage bucket balcony_language; see balcony_language.sql)
+var TBL='balcony_language',BUCKET='balcony_language',MAXB=5*1024*1024,XLSX_MIME='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+var ready=false,uid=null,uname='',isAdmin=false,folders=[],curFolder=null,files=[],sortBy='date',pick=null;
+function folderKey(name){return String(name||'').normalize('NFKC').trim().toLocaleLowerCase()}
+function pubUrl(p){return sb.storage.from(BUCKET).getPublicUrl(p).data.publicUrl}
+function needLogin(){openLogin();$('lerr').textContent='Please login first.'}
+function onAuth(u,p){
+  uid=u?u.id:null;uname=u?((p&&p.display_name)||nameOf(u)):'';isAdmin=false;
+  if(u&&sb)sb.from('pocony_users').select('roles').eq('uid',u.id).maybeSingle().then(({data})=>{
+    if(uid!==u.id)return;isAdmin=!!(data&&Array.isArray(data.roles)&&data.roles.includes('balcony_admin'));redraw()});
+  redraw();
+  if(u&&location.hash==='#language/English')openFolder('English')}
+function redraw(){if(!ready)return;renderPorts();if(!$('lfolder').hidden)renderFolderView()}
+function openModal(id){$(id).hidden=false}
+function closeModal(id){$(id).hidden=true}
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.dataset.close));
+['nmodal','umodal','pmodal'].forEach(id=>$(id).addEventListener('mousedown',e=>{if(e.target==$(id))closeModal(id)}));
+addEventListener('keydown',e=>{if(e.key=='Escape')['nmodal','umodal','pmodal'].forEach(closeModal)});
+
+// folder cards
+async function loadFolders(){
+  if(!sb)return;
+  const {data,error}=await sb.from(TBL).select('id,name,created_at').eq('kind','folder').order('created_at');
+  if(!error)folders=data||[];
+  renderPorts()}
+async function ensureEnglishFolder(){
+  let folder=folders.find(f=>folderKey(f.name)==='english');
+  if(!folder&&sb){await loadFolders();folder=folders.find(f=>folderKey(f.name)==='english')}
+  if(folder||!uid||!sb)return folder||null;
+  const {data,error}=await sb.from(TBL).insert({kind:'folder',name:'English',uploader_name:'Pocony'}).select('id,name,created_at').single();
+  if(!error&&data){folders=[...folders,data];return data}
+  await loadFolders();return folders.find(f=>folderKey(f.name)==='english')||null}
+function renderPorts(){
+  const g=$('ports');g.innerHTML='';
+  const mk=(href,name)=>{const a=document.createElement('a');a.className='card';a.href=href;
+    a.innerHTML='<b></b>';a.querySelector('b').textContent=name;g.appendChild(a)};
+  mk('#language/English','Original File');
+  const b=document.createElement('button');b.className='card';b.type='button';
+  b.innerHTML='<span class="fl">'+icon('plus')+'</span><span>Add</span>';
+  b.onclick=()=>{if(!uid)return needLogin();$('nerr').textContent='';$('nname').value='';openModal('nmodal');$('nname').focus()};
+  g.appendChild(b);
+  folders.filter(f=>folderKey(f.name)!=='english').forEach(f=>mk('#language/'+f.id,f.name))}
+$('nform').onsubmit=async e=>{
+  e.preventDefault();const err=$('nerr'),name=$('nname').value.trim();err.textContent='';
+  if(!name)return;
+  if(!uid||!sb)return needLogin();
+  if(folderKey(name)==='english'||folderKey(name)==='original file'||folders.some(f=>folderKey(f.name)===folderKey(name))){err.textContent='Name already exists.';return}
+  $('nok').disabled=true;
+  const {data,error}=await sb.from(TBL).insert({kind:'folder',name,uploader_name:uname}).select('id').single();
+  $('nok').disabled=false;
+  if(error){err.textContent=error.code=='23505'?'Name already exists.':error.message;return}
+  closeModal('nmodal');await loadFolders();location.hash='#language/'+data.id};
+
+// folder view
+async function openFolder(id){
+  if(!ready)return;
+  if(id=='English'){
+    const folder=await ensureEnglishFolder();
+    curFolder=folder?{...folder,name:'English'}:{id:'English',name:'English',builtin:true};
+  }
+  else{
+    curFolder=folders.find(f=>f.id==id)||null;
+    if(!curFolder){await loadFolders();curFolder=folders.find(f=>f.id==id)||null}
+    if(!curFolder){location.hash='#language';return}
+  }
+  files=[];renderFolderView();
+  if(!curFolder.builtin)loadFiles()}
+async function loadFiles(){
+  const id=curFolder&&curFolder.id;if(!id||!sb)return;
+  const {data,error}=await sb.from(TBL).select('id,name,storage_path,uploader_name,created_at,likes').eq('kind','file').eq('folder_id',id);
+  if(!curFolder||curFolder.id!=id)return;
+  if(error){toast('Failed to load');return}
+  files=data||[];renderFolderView()}
+function renderFolderView(){
+  if(!curFolder)return;const builtin=curFolder.builtin;
+  const eng=folderKey(curFolder.name)==='english';if(eng)sortBy='date';
+  $('ftitle').textContent=eng?'Original File':curFolder.name;
+  $('fdel').hidden=!(isAdmin&&!builtin&&folderKey(curFolder.name)!=='english');$('ftool').hidden=eng&&!isAdmin;
+  document.querySelector('.sorts').hidden=eng;
+  $('fup').hidden=eng&&!isAdmin;
+  document.querySelectorAll('[data-sort]').forEach(b=>b.classList.toggle('on',b.dataset.sort==sortBy));
+  const rows=$('lrows');rows.innerHTML='';
+  const t=x=>new Date(x.created_at).getTime(),nl=x=>(x.likes||[]).length;
+  let list=files.slice();
+  list.sort((a,b)=>sortBy=='likes'?(nl(b)-nl(a)||t(b)-t(a)):t(b)-t(a));
+  if(!list.length){const p=document.createElement('p');p.className='empty';p.textContent='No files yet.';rows.appendChild(p)}
+  list.forEach(f=>rows.appendChild(makeRow(f)))}
+function makeRow(f){
+  const r=document.createElement('div');r.className='frow';
+  const url=pubUrl(f.storage_path);
+  const d=f.created_at?new Date(f.created_at):null;
+  const date=d?String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0'):'';
+  r.innerHTML='<div class="meta"><button class="fn" type="button"></button><small></small></div>';
+  r.querySelector('.fn').textContent=f.name;
+  r.querySelector('small').textContent=date+' · '+(f.uploader_name||'?');
+  r.querySelector('.fn').onclick=()=>preview(f.name,url);
+  const add=(graphic,title,fn,cls)=>{const b=document.createElement('button');b.type='button';b.className='sq'+(cls?' '+cls:'');
+    b.innerHTML=graphic;b.title=title;b.setAttribute('aria-label',title);b.onclick=fn;r.appendChild(b)};
+  add(icon('download'),'Download',()=>uid?download(f.name,url):needLogin(),'icon-button download');
+  if(folderKey(curFolder.name)!=='english'){
+    const likes=f.likes||[],liked=uid&&likes.includes(uid);
+    add(icon('heart')+'<span>'+likes.length+'</span>',liked?'Unlike':'Like',()=>like(f),'lk icon-button like');
+    if(liked)r.lastChild.querySelector('.icon').style.fill='currentColor';
+  }
+  if(isAdmin)add(icon('trash-2'),'Delete',()=>delFile(f),'icon-button');
+  return r}
+document.querySelectorAll('[data-sort]').forEach(b=>b.onclick=()=>{sortBy=b.dataset.sort;renderFolderView()});
+$('fback').onclick=()=>{location.hash='#language'};
+
+async function like(f){
+  if(!uid)return needLogin();
+  const cur=f.likes||[];f.likes=cur.includes(uid)?cur.filter(x=>x!=uid):cur.concat(uid);renderFolderView();
+  const {error}=await sb.rpc('toggle_balcony_like',{file_id:f.id});
+  if(error){toast('Failed');loadFiles()}}
+async function download(name,url){
+  try{const r=await fetch(url);if(!r.ok)throw 0;const b=await r.blob();
+    const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000)}catch(e){toast('Download failed')}}
+
+// preview (SheetJS, loaded on demand)
+function loadXLSX(){return window.XLSX?Promise.resolve():new Promise((ok,no)=>{const s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+async function preview(name,url){
+  $('ptitle').textContent=name;$('ptabs').innerHTML='';$('pbody').textContent='Loading...';openModal('pmodal');
+  try{
+    await loadXLSX();const r=await fetch(url);if(!r.ok)throw 0;
+    const wb=XLSX.read(await r.arrayBuffer(),{type:'array'});
+    const show=n=>{
+      const rows=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:''}),MAX=1000;
+      const tb=document.createElement('table');
+      rows.slice(0,MAX).forEach(row=>{const tr=document.createElement('tr');
+        row.forEach(c=>{const td=document.createElement('td');td.textContent=String(c);tr.appendChild(td)});tb.appendChild(tr)});
+      $('pbody').innerHTML='';$('pbody').appendChild(tb);
+      if(rows.length>MAX){const p=document.createElement('p');p.className='empty';p.style.padding='0 8px';p.textContent='Showing first '+MAX+' rows. Download for the full file.';$('pbody').appendChild(p)}
+      [...$('ptabs').children].forEach(b=>b.classList.toggle('on',b.textContent==n))};
+    if(wb.SheetNames.length>1)wb.SheetNames.forEach(n=>{const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=n;b.onclick=()=>show(n);$('ptabs').appendChild(b)});
+    show(wb.SheetNames[0]);
+  }catch(e){$('pbody').textContent='Cannot open this file.'}}
+
+// upload
+$('fup').onclick=async()=>{if(!uid)return needLogin();if(!curFolder)return;
+  if(folderKey(curFolder.name)==='english'&&!isAdmin){toast('Admins only');return}
+  if(folderKey(curFolder.name)==='english'&&!isAdmin){toast('Admin only');return}
+  if(curFolder.builtin){curFolder=await ensureEnglishFolder();if(!curFolder){toast('Could not open English folder');return}renderFolderView()}
+  setPick(null);$('uname').textContent='Drag an .xlsx here or click to choose';openModal('umodal')};
+function setPick(f){
+  const err=$('uerr');err.textContent='';pick=null;$('uok').disabled=true;$('uok').hidden=true;if(!f)return;
+  if(!/\.xlsx$/i.test(f.name)){err.textContent='Only .xlsx files.';return}
+  if(f.size>MAXB){err.textContent='Max 5 MB.';return}
+  pick=f;$('uname').textContent=f.name;$('uok').hidden=false;$('uok').disabled=false}
+const dz=$('udrop');
+dz.onclick=()=>$('ufile').click();
+dz.onkeydown=e=>{if(e.key=='Enter'||e.key==' '){e.preventDefault();$('ufile').click()}};
+dz.ondragover=e=>{e.preventDefault();dz.classList.add('over')};
+dz.ondragleave=()=>dz.classList.remove('over');
+dz.ondrop=e=>{e.preventDefault();dz.classList.remove('over');setPick(e.dataTransfer.files[0])};
+$('ufile').onchange=e=>{setPick(e.target.files[0]);e.target.value=''};
+$('uok').onclick=async()=>{
+  if(!pick||!uid||!curFolder||curFolder.builtin)return;
+  if(folderKey(curFolder.name)==='english'&&!isAdmin){$('uerr').textContent='Admins only.';return}
+ $('uok').disabled=true;$('uerr').textContent='';
+  const path=crypto.randomUUID()+'.xlsx',fid=curFolder.id;
+  const up=await sb.storage.from(BUCKET).upload(path,pick,{contentType:XLSX_MIME});
+  if(up.error){$('uerr').textContent=up.error.message;$('uok').disabled=false;return}
+  const ins=await sb.from(TBL).insert({kind:'file',folder_id:fid,name:pick.name,storage_path:path,uploader_name:uname});
+  if(ins.error){await sb.storage.from(BUCKET).remove([path]);$('uerr').textContent=ins.error.message;$('uok').disabled=false;return}
+  closeModal('umodal');pick=null;loadFiles()};
+
+// admin delete
+async function delFile(f){
+  if(!isAdmin||!confirm('Delete "'+f.name+'"?'))return;
+  const {data,error}=await sb.from(TBL).delete().eq('id',f.id).select('id');
+  if(error||!data||!data.length){toast('No permission');return}
+  await sb.storage.from(BUCKET).remove([f.storage_path]);
+  files=files.filter(x=>x.id!=f.id);renderFolderView()}
+$('fdel').onclick=async()=>{
+  const f=curFolder;if(!f||f.builtin||folderKey(f.name)==='english'||!isAdmin)return;
+  if(!confirm('Delete folder "'+f.name+'" and all files in it?'))return;
+  const {data:fs}=await sb.from(TBL).select('storage_path').eq('folder_id',f.id);
+  const {data,error}=await sb.from(TBL).delete().eq('id',f.id).select('id');
+  if(error||!data||!data.length){toast('No permission');return}
+  const paths=(fs||[]).map(x=>x.storage_path).filter(Boolean);
+  if(paths.length)await sb.storage.from(BUCKET).remove(paths);
+  folders=folders.filter(x=>x.id!=f.id);location.hash='#language'};
+
+ready=true;renderPorts();route();loadFolders();
 </script>
 </body>
 </html>
