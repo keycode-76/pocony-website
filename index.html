@@ -135,7 +135,8 @@ a.card{text-decoration:none;color:var(--ink)}
 .lead{color:var(--ink);margin:4px 0 16px}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
 .card{font:inherit;text-align:left;background:var(--white);border:1px solid var(--ink);padding:12px;cursor:pointer;display:flex;gap:10px;align-items:center;min-height:64px}
-.card.solid{background:var(--ink);color:#fff}
+.card.solid,#ports #fadd,#ports a[href="#language/English"]{background:var(--ink);color:#fff}
+#ports #fmerge{background:var(--sub);color:var(--ink)}
 .card .fl{font-size:28px}
 .card b{font-weight:400}
 .card small{display:block;color:var(--sub)}
@@ -207,13 +208,13 @@ footer a{color:var(--accent);margin:0 8px}
   <section id="lang" class="sheet short" aria-label="Language" hidden>
     <h2 class="fat">Language</h2>
     <p class="lead">If you can't find the translation you want, you can download the latest file to translate. The most liked file may be used. Files that do not qualify will be deleted. Daily uploads are limited.</p>
-    <div class="grid" id="ports"></div>
+    <div class="grid" id="ports"><button class="card solid" id="fmerge" type="button">Merge Versions</button></div>
   </section>
 
   <!-- Language folder -->
   <section id="lfolder" class="sheet short" aria-label="Folder" hidden>
     <div class="top"><button class="sq" id="fback" aria-label="Back"></button><h2 class="fat" id="ftitle" style="margin:0;font-size:32px;min-width:0;overflow-wrap:anywhere"></h2><button class="sq icon-button" id="fdel" hidden aria-label="Delete folder" title="Delete folder" style="margin-left:auto"></button></div>
-    <div class="ftool" id="ftool"><div class="row"><button class="btn solid" id="fmerge" type="button" hidden>Merge Versions</button><button class="btn solid" id="fup" type="button"><span data-icon="upload"></span>Upload</button></div><span class="sorts"><button class="btn on" type="button" data-sort="date">Date</button><button class="btn" type="button" data-sort="likes">Likes</button></span></div>
+    <div class="ftool" id="ftool"><button class="btn solid" id="fup" type="button"><span data-icon="upload"></span>Upload</button><span class="sorts"><button class="btn on" type="button" data-sort="date">Date</button><button class="btn" type="button" data-sort="likes">Likes</button></span></div>
     <div id="lrows"></div>
   </section>
 </main>
@@ -482,6 +483,7 @@ if(sb){
 // ---- Language folders (table balcony_language + storage bucket balcony_language; see balcony_language.sql)
 var TBL='balcony_language',BUCKET='balcony_language',MAXB=5*1024*1024,XLSX_MIME='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 var ready=false,uid=null,uname='',isAdmin=false,folders=[],curFolder=null,files=[],filesLoaded=false,sortBy='date',pick=null;
+var mergeSource=null,mergeSourceRequest=0;
 function folderKey(name){return String(name||'').normalize('NFKC').trim().toLocaleLowerCase()}
 function ownsLanguageEntry(entry){return !!(uid&&entry&&entry.uploader_uid&&String(entry.uploader_uid)===String(uid))}
 function canDeleteFile(file){return !!uid&&(isAdmin||ownsLanguageEntry(file))}
@@ -497,6 +499,7 @@ function onAuth(u,p){
     if(uid!==u.id)return;isAdmin=!!(data&&Array.isArray(data.roles)&&data.roles.includes('balcony_admin'));redraw()});
   if(!u&&!$('mmodal').hidden)closeModal('mmodal');
   redraw();
+  if(u&&ready&&!$('lang').hidden)refreshMergeSource();
   if(u&&ready&&!$('lfolder').hidden&&curFolder){
     if(curFolder.builtin&&folderKey(curFolder.name)==='english')openFolder('English');
     else loadFiles();
@@ -513,7 +516,23 @@ async function loadFolders(){
   if(!sb)return;
   const {data,error}=await sb.from(TBL).select('id,name,created_at,uploader_uid').eq('kind','folder').order('created_at');
   if(!error)folders=data||[];
-  renderPorts()}
+  renderPorts();await refreshMergeSource()}
+function syncMergeButton(){
+  // Keep the action visible through sign-in and source loading, just like Add.
+  $('fmerge').hidden=false;
+}
+async function refreshMergeSource(){
+  const request=++mergeSourceRequest;
+  const folder=folders.find(f=>folderKey(f.name)==='english');
+  if(!folder||!sb){mergeSource=null;syncMergeButton();return}
+  try{
+    const {data,error}=await sb.from(TBL).select('id').eq('kind','file').eq('folder_id',folder.id)
+      .order('created_at',{ascending:false}).limit(1).maybeSingle();
+    if(request!==mergeSourceRequest)return;
+    mergeSource=!error&&data?{folderId:folder.id}:null;
+    syncMergeButton();
+  }catch(e){if(request===mergeSourceRequest){mergeSource=null;syncMergeButton()}}
+}
 async function ensureEnglishFolder(){
   let folder=folders.find(f=>folderKey(f.name)==='english');
   if(!folder&&sb){await loadFolders();folder=folders.find(f=>folderKey(f.name)==='english')}
@@ -522,14 +541,15 @@ async function ensureEnglishFolder(){
   if(!error&&data){folders=[...folders,data];return data}
   await loadFolders();return folders.find(f=>folderKey(f.name)==='english')||null}
 function renderPorts(){
-  const g=$('ports');g.innerHTML='';
+  const g=$('ports'),mergeButton=$('fmerge');g.innerHTML='';
   const mk=(href,name)=>{const a=document.createElement('a');a.className='card';a.href=href;
     a.innerHTML='<b></b>';a.querySelector('b').textContent=name;g.appendChild(a)};
   mk('#language/English','Original File');
-  const b=document.createElement('button');b.className='card solid';b.type='button';
+  const b=document.createElement('button');b.id='fadd';b.className='card solid';b.type='button';
   b.innerHTML='<span class="fl">'+icon('plus')+'</span><span>Add</span>';
   b.onclick=()=>{if(!uid)return needLogin();$('nerr').textContent='';$('nname').value='';openModal('nmodal');$('nname').focus()};
   g.appendChild(b);
+  g.appendChild(mergeButton);syncMergeButton();
   folders.filter(f=>folderKey(f.name)!=='english').forEach(f=>mk('#language/'+f.id,f.name))}
 $('nform').onsubmit=async e=>{
   e.preventDefault();const err=$('nerr'),name=$('nname').value.trim();err.textContent='';
@@ -561,7 +581,11 @@ async function loadFiles(){
   const {data,error}=await sb.from(TBL).select('id,name,storage_path,uploader_uid,uploader_name,created_at,likes').eq('kind','file').eq('folder_id',id);
   if(!curFolder||curFolder.id!=id)return;
   if(error){toast('Failed to load');return}
-  files=data||[];filesLoaded=true;renderFolderView()}
+  files=data||[];filesLoaded=true;
+  if(folderKey(curFolder.name)==='english'){
+    mergeSourceRequest++;mergeSource=files.length?{folderId:id}:null;syncMergeButton();
+  }
+  renderFolderView()}
 function renderFolderView(){
   if(!curFolder)return;const builtin=curFolder.builtin;
   const eng=folderKey(curFolder.name)==='english';if(eng)sortBy='date';
@@ -569,8 +593,7 @@ function renderFolderView(){
   $('fdel').hidden=!canDeleteFolder(curFolder);
   document.querySelector('.sorts').hidden=eng;
   $('fup').hidden=eng&&!isAdmin;
-  $('fmerge').hidden=!uid||!eng||!files.length;
-  $('ftool').hidden=eng&&$('fup').hidden&&$('fmerge').hidden;
+  $('ftool').hidden=eng&&$('fup').hidden;
   document.querySelectorAll('[data-sort]').forEach(b=>b.classList.toggle('on',b.dataset.sort==sortBy));
   const rows=$('lrows');rows.innerHTML='';
   const t=x=>new Date(x.created_at).getTime(),nl=x=>(x.likes||[]).length;
@@ -681,20 +704,29 @@ function loadExcelJS(){
 }
 $('fmerge').onclick=()=>{
   if(!uid)return needLogin();
-  if(!curFolder||folderKey(curFolder.name)!=='english'||!files.length)return;
-  resetMerge();mergeFolderId=curFolder.id;openModal('mmodal');$('mdrop').focus();$('mfile').click();
+  const folder=folders.find(f=>folderKey(f.name)==='english');
+  resetMerge();mergeFolderId=mergeSource?mergeSource.folderId:(folder?folder.id:null);
+  openModal('mmodal');$('mdrop').focus();$('mfile').click();
 };
 async function mergeSelectedFile(file){
-  const request=++mergeRequest,folderId=mergeFolderId;
+  const request=++mergeRequest;
+  let folderId=mergeFolderId;
   mergeResult=null;$('mdownload').hidden=true;$('merr').textContent='';$('mstatus').textContent='';
   $('mdrop').setAttribute('aria-busy','false');
   if(!file)return;
   $('mname').textContent=file.name;
   if(!/\.xlsx$/i.test(file.name)){$('merr').textContent='Only .xlsx files.';return}
   if(file.size>MAXB){$('merr').textContent='Max 5 MB.';return}
-  if(!folderId||!sb)return;
+  if(!sb){$('merr').textContent='Could not connect. Please try again.';return}
   $('mstatus').textContent='Comparing with the latest Original File…';$('mdrop').setAttribute('aria-busy','true');
   try{
+    if(!folderId){
+      await loadFolders();
+      if(request!==mergeRequest)return;
+      const folder=folders.find(f=>folderKey(f.name)==='english');
+      if(!folder)throw new Error('No Original File is available to merge.');
+      folderId=folder.id;mergeFolderId=folderId;
+    }
     const {data:latest,error}=await sb.from(TBL).select('id,name,storage_path,created_at')
       .eq('kind','file').eq('folder_id',folderId).order('created_at',{ascending:false}).order('id',{ascending:false}).limit(1).maybeSingle();
     if(error)throw new Error('Could not load the latest Original File. Please try again.');

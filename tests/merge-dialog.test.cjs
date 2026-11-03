@@ -21,7 +21,7 @@ function harness(original){
   for(const name of ['select','eq','order','limit'])query[name]=(...args)=>{queries.push([name,...args]);return query};
   query.maybeSingle=async()=>({data:{id:'newest',storage_path:'latest.xlsx'}});
   const context={ExcelJS,MergeVersions,Blob,Promise,console,
-    $:element,uid:'user',curFolder:{id:'english-id',name:'English'},files:[{id:'existing'}],MAXB:5*1024*1024,
+    $:element,uid:'user',mergeSource:{folderId:'english-id'},curFolder:{id:'english-id',name:'English'},files:[{id:'existing'}],MAXB:5*1024*1024,
     TBL:'balcony_language',XLSX_MIME:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     sb:{from:()=>query},pubUrl:path=>'https://test.invalid/'+path,
     fetch:async()=>({ok:true,arrayBuffer:async()=>original}),folderKey:name=>name.toLowerCase(),
@@ -80,6 +80,6 @@ test('login and existing original are required before selecting a file',async()=
   const {context,element}=harness(null);context.uid=null;element('fmerge').onclick();
   assert.equal(context.loginRequested,true);
   assert.equal(context.mergeFolderId,null);
-  context.uid='user';context.files=[];element('fmerge').onclick();
+  context.uid='user';context.mergeSource=null;element('fmerge').onclick();
   assert.equal(context.mergeFolderId,null);
 });
