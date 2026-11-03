@@ -737,8 +737,17 @@ async function mergeSelectedFile(file){
     const [originalBytes,uploadedBytes]=await Promise.all([response.arrayBuffer(),file.arrayBuffer()]);
     if(request!==mergeRequest)return;
     const original=new ExcelJS.Workbook(),uploaded=new ExcelJS.Workbook();
-    try{await Promise.all([original.xlsx.load(originalBytes),uploaded.xlsx.load(uploadedBytes)])}
-    catch(e){throw new Error('Cannot read the Excel files. Please choose a valid .xlsx file.')}
+    await Promise.all([
+      // Only source cell data is needed from A. Skipping table definitions avoids
+      // ExcelJS failing on valid absolute table relationship paths in this file.
+      original.xlsx.load(originalBytes,{ignoreNodes:['tableParts']}).catch(()=>{
+        throw new Error('Could not read the latest Original File ('+latest.name+'). Please contact the administrator.');
+      }),
+      // Keep B's formatting and workbook features for the downloadable result.
+      uploaded.xlsx.load(uploadedBytes).catch(()=>{
+        throw new Error('Could not read the uploaded file ('+file.name+'). Please save it as an unencrypted .xlsx file and try again.');
+      })
+    ]);
     if(request!==mergeRequest)return;
     const result=MergeVersions.mergeWorkbooks(original,uploaded);
     if(!result.changed){$('mstatus').textContent='The files are identical. No rows need to be merged.';return}
@@ -747,7 +756,7 @@ async function mergeSelectedFile(file){
     mergeResult={blob:new Blob([buffer],{type:XLSX_MIME}),name:file.name.replace(/\.xlsx$/i,'')+'-merged.xlsx'};
     $('mstatus').textContent='Merge complete. '+result.added+' new row(s) highlighted; '+result.removed+' outdated row(s) removed.';
     $('mdownload').hidden=false;
-  }catch(error){if(request===mergeRequest)$('merr').textContent=error.message||'Merge failed. Please try again.'}
+  }catch(error){if(request===mergeRequest){$('mstatus').textContent='';$('merr').textContent=error.message||'Merge failed. Please try again.'}}
   finally{if(request===mergeRequest)$('mdrop').setAttribute('aria-busy','false')}
 }
 const mergeDrop=$('mdrop');
